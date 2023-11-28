@@ -1,0 +1,21 @@
+---
+name: sdl-test-fault
+description: gql File upload
+basePath: /gql/data
+openApiSpec: sdl-test-fault.gql
+environmentSpec: Dev
+type: API
+authMethod: none
+product:
+  productName: NewTestProduct
+allowedOrigins:
+  origins: http://localhost/
+  creds: "false"
+  methods: "get,post"
+  allowHeaders: "origin, content-type, accept,X-PINGOTHER"
+  exposeHeaders: "Cache-Control, Content-Language, Content-Length, Content-Type, Expires,\
+    \ Last-Modified, Pragma"
+  maxSeconds: ""
+  crossoriginpolicyapply: product
+schemes: []
+routes: []

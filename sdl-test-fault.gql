@@ -1,0 +1,7925 @@
+
+directive @defer(
+  
+  label: String
+
+  
+  if: Boolean
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+
+directive @stream(
+  
+  label: String
+
+  
+  initialCount: Int! = 0
+
+  
+  if: Boolean
+) on FIELD
+
+
+directive @delegate(
+  
+  path: String
+
+  
+  schema: Name!
+) on FIELD_DEFINITION
+
+directive @computed(
+  
+  dependantOn: [Name!]
+) on FIELD_DEFINITION
+
+
+directive @source(
+  
+  name: Name!
+
+  
+  schema: Name!
+) on ENUM | OBJECT | INTERFACE | UNION | INPUT_OBJECT | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM_VALUE
+
+directive @authorize(
+  
+  policy: String
+
+  
+  roles: [String!]
+
+  
+  apply: ApplyPolicy! = BEFORE_RESOLVER
+) on SCHEMA | OBJECT | FIELD_DEFINITION
+
+scalar Uuid
+
+type Query {
+  subscriptionModules(
+    where: SubscriptionModuleFilterInput
+  ): [SubscriptionModule]
+  idmsInfo: IdmsInfo
+  thingMetadataInfo(
+    thingIds: [Int!]
+    topologymode: String
+    displaymode: String
+  ): [EMCP_NodeInfoType]
+  permissions(
+    appContext: [EMCP_TopoNodeContextInput!]
+    where: EMCP_PermissionFilterInput
+  ): [EMCP_Permission!]!
+
+  
+  role(appContext: [EMCP_TopoNodeContextInput!]): EMCP_Role
+
+  
+  roles(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]
+  ): EMCP_RoleCollectionSegment
+
+  
+  accesses(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]
+    where: EMCP_AccessFilterInput
+  ): EMCP_AccessCollectionSegment
+
+  
+  accessAssignments(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]
+    subjectId: Int
+    where: EMCP_AccessAssignmentFilterInput
+    order: [EMCP_AccessAssignmentSortInput!]
+  ): EMCP_AccessAssignmentCollectionSegment
+  tenants(where: EMCP_ThingFilterInput): [EMCP_Thing]
+  tenant(id: Int!): EMCP_Thing
+  things(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput]
+    includeAllParents: Boolean! = false
+    includeLeafDevice: Boolean! = false
+    where: EMCP_ThingFilterInput
+    order: [EMCP_ThingSortInput!]
+  ): EMCP_ThingCollectionSegment
+  hierarchy(
+    appContext: [EMCP_TopoNodeContextInput]
+    mode: EMCP_HierarchyMode!
+    includeAllParents: Boolean! = false
+    where: EMCP_HierarchyFilterInput
+  ): [EMCP_Hierarchy]
+  appContext(
+    thingId: Int!
+    includeCurrentThing: Boolean! = false
+  ): [EMCP_TopoNodeContext]
+  slots(
+    skip: Int
+    take: Int
+    where: EMCP_SlotFilterInput
+    order: [EMCP_SlotSortInput!]
+  ): EMCP_SlotCollectionSegment
+  assetInfo(
+    appContext: [EMCP_TopoNodeContextInput]
+    type: EMCP_AssetType!
+    commercialReference: String
+    serialNumber: String
+  ): EMCP_AssetInfo
+  measureMappingInfo(
+    appContext: [EMCP_TopoNodeContextInput!]!
+    thingIds: [Int!]
+    businessQuantityNames: [String!]!
+    useRealTimePriority: Boolean!
+    mappingKind: EMCP_MappingKindType!
+  ): [EMCP_BusinessQuantityMeasureMappingInfo!]!
+  events(
+    skip: Int
+    take: Int
+    where: EMCP_EventFilterInput
+    order: [EMCP_EventSortInput!]
+  ): EMCP_EventCollectionSegment
+  eventConceptThings(
+    skip: Int
+    take: Int
+    where: EMCP_EventConceptThingFilterInput
+    order: [EMCP_EventConceptThingSortInput!]
+  ): EMCP_EventConceptThingCollectionSegment
+
+  
+  subjects(
+    skip: Int
+    take: Int
+
+   
+    appContext: [EMCP_TopoNodeContextInput!]
+
+    
+    kind: EMCP_SubjectKind!
+    where: EMCP_SubjectFilterInput
+  ): EMCP_SubjectCollectionSegment
+
+  
+  subject(federatedId: String, email: String, subjectId: Int): EMCP_Subject
+  subscription(
+    appContext: [EMCP_TopoNodeContextInput]
+    activationCode: String
+  ): eeoSubscription
+  subscriptions(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput]
+    accountId: String
+  ): eeoSubscriptionCollectionSegment
+  modules(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput]
+    where: EMCP_ModuleFilterInput
+  ): EMCP_ModuleCollectionSegment
+  subscriptionProductUsages(
+    skip: Int
+    take: Int
+    where: EMCP_SubscriptionProductUsageFilterInput
+    order: [EMCP_SubscriptionProductUsageSortInput!]
+  ): EMCP_SubscriptionProductUsageCollectionSegment
+  subscriptionProduct(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput]
+  ): EMCP_SubscriptionProductUsageCollectionSegment
+    @deprecated(reason: "Use the `subscriptionProductUsages` query instead")
+  subscriptionProducts(
+    where: EMCP_SubscriptionProductFilterInput
+  ): [EMCP_SubscriptionProduct]
+  microapps(
+    where: EMCP_MicroAppFilterInput
+    order: [EMCP_MicroAppSortInput!]
+  ): [EMCP_MicroApp!]!
+  dynamicLayouts(
+    tenantId: Int
+    where: EMCP_RouteLayoutFilterInput
+    order: [EMCP_RouteLayoutSortInput!]
+  ): [EMCP_RouteLayout!]!
+  layouts(
+    appContext: [EMCP_TopoNodeContextInput!]
+    where: EMCP_UiLayoutFilterInput
+    order: [EMCP_UiLayoutSortInput!]
+  ): [EMCP_UiLayout!]!
+  features: [EMCP_Feature!]!
+  termsOfUse(
+    where: EMCP_TermsOfUseFilterInput
+    order: [EMCP_TermsOfUseSortInput!]
+  ): [EMCP_TermsOfUse!]!
+  aggregatedTimeSeries(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    slotUuids: [Uuid!]!
+    startTime: DateTime!
+    endTime: DateTime!
+    timeZone: String!
+    aggregationInterval: EMCP_AggregationInterval!
+    aggregationDayLightSavingTimeBehavior: EMCP_AggregationDayLightSavingTimeBehaviorType!
+    aggregationQualityBehavior: EMCP_AggregationQualityBehaviorType! = INCLUDE
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_AggregatedTimeSeriesCollectionSegment
+  rawTrendData(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    businessQuantityNames: [String!]!
+    startTime: DateTime!
+    endTime: DateTime!
+    timeZone: String!
+  ): EMCP_BusinessQuantityTimeSeriesCollectionSegment
+  binnedTrendData(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    businessQuantityName: String!
+    startTime: DateTime!
+    endTime: DateTime!
+    timeZone: String!
+    aggregationInterval: EMCP_AggregationInterval!
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_BusinessQuantityBinnedTimeSeriesCollectionSegment
+  binnedUsageTrendData(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    businessQuantityName: String!
+    startTime: DateTime!
+    endTime: DateTime!
+    timeZone: String!
+    aggregationInterval: EMCP_AggregationInterval!
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_BusinessQuantityBinnedUsageTimeSeriesCollectionSegment
+  rankedMeasures(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    businessQuantityName: String!
+    startTime: DateTime!
+    endTime: DateTime!
+    topoConceptUrn: String
+    order: [EMCP_RankedMeasureValueSortInput!]
+  ): EMCP_RankedMeasureValueCollectionSegment
+  rankedEnergyIntensity(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_RankedEnergyIntensityInput!
+    order: [EMCP_RankedEnergyIntensityValueSortInput!]
+  ): EMCP_RankedEnergyIntensityValueCollectionSegment
+    @deprecated(reason: "Use GetRankedUsageIntensity instead")
+  rankedUsageIntensity(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_RankedUsageIntensityInput!
+    order: [EMCP_RankedUsageIntensityValueSortInput!]
+  ): EMCP_RankedUsageIntensityValueCollectionSegment
+  binnedUsageCostData(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_BinnedUsageCostDataInput!
+    where: EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsFilterInput
+  ): EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsCollectionSegment
+  usageData(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_GetUsageDataInput!
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_BusinessQuantityUsageDataCollectionSegment
+  energyUsageSummary(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_EnergyUsageSummaryInput!
+  ): EMCP_EnergyUsageSummaryCollectionSegment
+  binnedEnergyConsumption(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_BinnedEnergyConsumptionInput!
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_BusinessQuantityBinnedUsageTimeSeriesCollectionSegment
+  binnedEnergyProduction(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_BinnedEnergyConsumptionInput!
+    normalizationFactor: EMCP_NormalizationFactor
+    specialFilter: EMCP_SpecialFilter
+  ): EMCP_BusinessQuantityBinnedUsageTimeSeriesCollectionSegment
+  aiStructure(input: EMCP_GetAiStructureInput!): EMCP_GetAiStructurePayload!
+  aiModuleStatus(
+    input: EMCP_GetAiModuleStatusInput!
+  ): EMCP_GetAiModuleStatusPayload!
+  properties(where: EMCP_PropertyFilterInput): [EMCP_Property]
+  enumDescriptions(
+    where: EMCP_EnumDescriptionFilterInput
+  ): [EMCP_EnumDescription]
+  toponodes(where: EMCP_TopoNodeFilterInput): [EMCP_TopoNode]
+  topologies(where: EMCP_TopologyFilterInput): [EMCP_Topology]
+  packages(where: EMCP_PackageFilterInput): [EMCP_Package]
+  tags(where: EMCP_TagFilterInput): [EMCP_Tag]
+  standards(where: EMCP_StandardFilterInput): [EMCP_Standard]
+  standardDescriptions(
+    where: EMCP_StandardDescriptionFilterInput
+  ): [EMCP_StandardDescription]
+  propertyLinks(where: EMCP_PropertyLinkFilterInput): [EMCP_PropertyLink]
+  nodeInfos(where: EMCP_NodeInfoFilterInput): [EMCP_NodeInfo]
+  nodeInfoLayouts(where: EMCP_NodeInfoLayoutFilterInput): [EMCP_NodeInfoLayout]
+  alarmConcepts(where: EMCP_AlarmConceptFilterInput): [EMCP_AlarmConcept]
+  alarmMappings(where: EMCP_AlarmMappingFilterInput): [EMCP_AlarmMapping]
+  alarmPropertyLinks(
+    where: EMCP_AlarmPropertyLinkFilterInput
+  ): [EMCP_AlarmPropertyLink]
+  alarmEventConceptCategories(
+    where: EMCP_AlarmEventConceptCategoryFilterInput
+  ): [EMCP_AlarmEventConceptCategory]
+  alarmEventConceptCategoryModuleMappings(
+    where: EMCP_AlarmEventConceptCategoryModuleMappingFilterInput
+  ): [EMCP_AlarmEventConceptCategoryModuleMapping]
+  alarmEventConceptTypes(
+    where: EMCP_AlarmEventConceptTypeFilterInput
+  ): [EMCP_AlarmEventConceptType]
+  concepts(where: EMCP_ConceptFilterInput): [EMCP_Concept]
+  conceptTypeMappings(
+    where: EMCP_ConceptTypeMappingFilterInput
+  ): [EMCP_ConceptTypeMapping]
+  eventConcepts(where: EMCP_EventConceptFilterInput): [EMCP_EventConcept]
+  eventMappings(where: EMCP_EventMappingFilterInput): [EMCP_EventMapping]
+  eventPropertyLinks(
+    where: EMCP_EventPropertyLinkFilterInput
+  ): [EMCP_EventPropertyLink]
+  measures(where: EMCP_MeasureFilterInput): [EMCP_Measure]
+  measureMappings(where: EMCP_MeasureMappingFilterInput): [EMCP_MeasureMapping]
+  mValueMappings(where: EMCP_MValueMappingFilterInput): [EMCP_MValueMapping]
+  businessQuantities(
+    where: EMCP_BusinessQuantityFilterInput
+  ): [EMCP_BusinessQuantity]
+  businessQuantityPriorities(
+    where: EMCP_BusinessQuantityPriorityFilterInput
+  ): [EMCP_BusinessQuantityPriority]
+  phaseDescriptions(
+    where: EMCP_PhaseDescriptionFilterInput
+  ): [EMCP_PhaseDescription]
+  units(where: EMCP_UnitFilterInput): [EMCP_Unit]
+  measureLinks(where: EMCP_MeasureLinkFilterInput): [EMCP_MeasureLink]
+  tableGadgets(where: EMCP_TableGadgetFilterInput): [EMCP_TableGadget]
+  tableGadgetItems(
+    where: EMCP_TableGadgetItemFilterInput
+  ): [EMCP_TableGadgetItem]
+  tableGadgetMappings(
+    where: EMCP_TableGadgetMappingFilterInput
+  ): [EMCP_TableGadgetMapping]
+  countries(where: EMCP_CountryFilterInput): [EMCP_Country]
+  currencies(where: EMCP_CurrencyFilterInput): [EMCP_Currency]
+  notificationsForUsers(
+    skip: Int
+    take: Int
+    subjectIds: [Int!]
+    where: EMCP_NotificationTokenFilterInput
+  ): EMCP_NotificationTokenDataCollectionSegment
+
+ 
+  query: Query!
+
+  
+  allAlgorithmMeasureLinks(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmMeasureLinkCondition
+  ): AlgorithmMeasureLinksConnection
+
+  
+  allAlgorithmPropertyLinks(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmPropertyLinkCondition
+  ): AlgorithmPropertyLinksConnection
+
+  
+  allDbupjournalDmls(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [DbupjournalDmlsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: DbupjournalDmlCondition
+  ): DbupjournalDmlsConnection
+
+  
+  allMeasureLinks(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: MeasureLinkCondition
+  ): MeasureLinksConnection
+
+  
+  allNodelinkPvalues(
+    
+    first: Int
+
+    
+    last: Int
+
+   
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [NodelinkPvaluesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: NodelinkPvalueCondition
+  ): NodelinkPvaluesConnection
+
+  
+  allSubjectids(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [SubjectidsOrderBy!] = [NATURAL]
+
+    
+    condition: SubjectidCondition
+  ): SubjectidsConnection
+  algorithmMeasureLinkById(id: Int!): AlgorithmMeasureLink
+  algorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValue(
+    packageId: Int!
+    equipmentConceptId: Int!
+    algorithmConceptId: Int!
+    inputMeasureId: Int!
+    inputTagId: Int!
+    inputTagValue: String!
+  ): AlgorithmMeasureLink
+  algorithmPropertyLinkById(id: Int!): AlgorithmPropertyLink
+  algorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyId(
+    packageId: Int!
+    equipmentConceptId: Int!
+    algorithmConceptId: Int!
+    inputPropertyId: Int!
+  ): AlgorithmPropertyLink
+  dbupjournalDmlBySchemaversionsid(schemaversionsid: Int!): DbupjournalDml
+  measureLinkById(id: Int!): MeasureLink
+  measureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValue(
+    packageId: Int!
+    conceptId: Int!
+    measureId: Int!
+    tagId: Int!
+    tagValue: String!
+  ): MeasureLink
+  nodelinkPvalueById(id: Int!): NodelinkPvalue
+  conceptkindmapper(conceptkind: String): Conceptkindtype
+
+  
+  getLatestMvalue(
+    slotuuids: [Uuid]
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): MvaluesConnection
+  hasDdlScriptBeenRun(scriptId: Int): Boolean
+  getActiveAlarmCounts(
+    thingids: [Int]
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): GetActiveAlarmCountsConnection
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  getContextDetailsForThing(
+    thingid: Int
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): GetContextDetailsForThingConnection
+
+  
+  getHierarchyInfo(
+    topologymode: String
+    ctxarray: [ContextparamInput]
+    includedpropertyurns: [String]
+    includeallparents: Boolean
+    excludechildrenbelowpropertyurn: String
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): HierarchyinfotypesConnection
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+
+  
+  getHierarchyNodeInfo(
+    topologymode: String
+    displaymode: String
+    ctxarray: [ContextparamInput]
+    includeallparents: Boolean
+    excludechildrenbelowpropertyurn: String
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): NodeinfotypesConnection
+
+  
+  getSinglelineLastValue(
+    filters: [ThingnodelinkbusinessquantitytypeInput]
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+	
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): SinglelinevaluestypesConnection
+
+  
+  getSinglelineRelations(
+    siteid: Int
+    linkkinds: [Linkkindtype]
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): NodelinksConnection
+
+  
+  getSinglelineThings(
+    siteid: Int
+    conceptkinds: [Conceptkindtype]
+
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+  ): ThingsConnection
+  getThingById(thingid: Int): Thing
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  getThingIdBySn(
+    serialnumber: String
+    commercialreference: String
+    isgateway: Boolean
+  ): Int @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  notificationPreferences(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    alarmOccurrenceId: Int
+    where: EMCP_NotificationPreferenceFilterInput
+  ): EMCP_NotificationPreferenceCollectionSegment
+  alarmInstances(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    hierarchyMode: EMCP_HierarchyMode
+    enableNotificationPreferences: Boolean = false
+    where: EMCP_AlarmInstanceFilterInput
+    order: [EMCP_AlarmInstanceSortInput!]
+  ): EMCP_AlarmInstanceCollectionSegment
+  alarmOccurrences(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    hierarchyMode: EMCP_HierarchyMode
+    enableNotificationPreferences: Boolean = false
+    where: EMCP_AlarmOccurrenceFilterInput
+    order: [EMCP_AlarmOccurrenceSortInput!]
+  ): EMCP_AlarmOccurrenceCollectionSegment
+  binnedAlarmOccurrences(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    hierarchyMode: EMCP_HierarchyMode
+    interval: EMCP_AggregationInterval!
+    startTime: DateTime!
+    endTime: DateTime!
+    alarmPriorityFilter: [EMCP_AlarmPriorityType!]
+    alarmStateFilter: [EMCP_AlarmStateType!]
+    alarmConceptCategoryFilter: [String!]
+    timeZone: String
+    enableNotificationPreferences: Boolean = false
+  ): EMCP_AlarmOccurrenceCountTimeRangeBinCollectionSegment
+  rankedAlarmOccurrences(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    hierarchyMode: EMCP_HierarchyMode
+    startTime: DateTime!
+    endTime: DateTime!
+    alarmPriorityFilter: [EMCP_AlarmPriorityType!]
+    alarmStateFilter: [EMCP_AlarmStateType!]
+    alarmConceptCategoryFilter: [String!]
+    enableNotificationPreferences: Boolean = false
+  ): EMCP_RankedAlarmOccurrenceCollectionSegment
+  alarmOccurrencesSummary(
+    appContext: [EMCP_TopoNodeContextInput!]!
+    interval: EMCP_AggregationInterval!
+    startTime: DateTime!
+    endTime: DateTime!
+    alarmPriorityFilter: [EMCP_AlarmPriorityType!]
+    alarmStateFilter: [EMCP_AlarmStateType!]
+    alarmConceptCategoryFilter: [String!]
+    timeZone: String!
+    enableNotificationPreferences: Boolean = false
+  ): EMCP_AlarmOccurrencesSummary!
+  tableGadgetItemsByContext(
+    skip: Int
+    take: Int
+    appContext: [EMCP_TopoNodeContextInput!]!
+    kind: String!
+    where: EMCP_TableGadgetItemWithUnitFilterInput
+    order: [EMCP_TableGadgetItemWithUnitSortInput!]
+  ): EMCP_TableGadgetItemWithUnitCollectionSegment
+}
+
+type Mutation {
+  groupAssignment(input: EMCP_GroupAssignmentMutationInput): Boolean!
+  deleteGroupAssignment(input: EMCP_GroupAssignmentMutationInput): Boolean!
+  accessAssignment(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_AccessAssignmentMutationInput
+  ): EMCP_AccessAssignment
+  deleteAccessAssignment(id: Int!): EMCP_AccessAssignment
+
+  
+  deleteAccess(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_AccessMutationInput
+  ): EMCP_Access
+  access(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_AccessMutationInput
+  ): EMCP_Access
+  thing(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_ThingMutationInput
+  ): EMCP_Thing
+  things(
+    appContext: [EMCP_TopoNodeContextInput]
+    thingsInput: [EMCP_ThingMutationInput]
+    nodeLinksInputs: [EMCP_NodeLinkMutationInput]
+  ): [EMCP_Thing]
+  deleteThing(input: EMCP_ThingMutationInput): EMCP_Thing
+  slot(input: EMCP_SlotMutationInput): EMCP_Slot
+  deleteSlot(guids: [Uuid!]): [EMCP_Slot]
+  nodeLink(input: [EMCP_NodeLinkMutationInput]): [EMCP_NodeLink]
+  deleteNodeLink(ids: [Int!]): [EMCP_NodeLink]
+  event(input: EMCP_EventMutationInput): EMCP_Event
+  deleteEvents(ids: [Int!]): [EMCP_Event]
+  eventConceptThing(input: EMCP_EventConceptThingInput): EMCP_EventConceptThing
+
+  
+  subject(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_SubjectMutationInput
+  ): EMCP_Subject
+
+  
+  deleteSubject(input: EMCP_SubjectMutationInput): EMCP_Subject
+  assignSubscriptionProduct(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_AssignSubscriptionProductInput
+  ): EMCP_SubscriptionProductUsage
+  unAssignSubscriptionProduct(
+    appContext: [EMCP_TopoNodeContextInput]
+    input: EMCP_AssignSubscriptionProductInput
+  ): EMCP_SubscriptionProductUsage
+  acknowledgeFeature(featureId: Int!): EMCP_UserFeatureTracking
+  layout(input: EMCP_LayoutMutationInput): EMCP_UiLayout
+  createAiModel(input: EMCP_CreateAiModelInput!): EMCP_CreateAiModelPayload!
+  notificationToken(
+    input: EMCP_NotificationTokenModelInput
+  ): EMCP_NotificationTokenData
+  deleteNotificationToken(
+    input: EMCP_NotificationTokenModelInput
+  ): EMCP_NotificationTokenData
+
+  
+  createAlgorithmMeasureLink(
+    
+    input: CreateAlgorithmMeasureLinkInput!
+  ): CreateAlgorithmMeasureLinkPayload
+
+ 
+  createAlgorithmPropertyLink(
+    
+    input: CreateAlgorithmPropertyLinkInput!
+  ): CreateAlgorithmPropertyLinkPayload
+
+  
+  createDbupjournalDml(
+    
+    input: CreateDbupjournalDmlInput!
+  ): CreateDbupjournalDmlPayload
+
+  
+  createMeasureLink(
+    
+    input: CreateMeasureLinkInput!
+  ): CreateMeasureLinkPayload
+
+  
+  createNodelinkPvalue(
+    
+    input: CreateNodelinkPvalueInput!
+  ): CreateNodelinkPvaluePayload
+
+  
+  createSubjectid(
+    
+    input: CreateSubjectidInput!
+  ): CreateSubjectidPayload
+
+  
+  updateAlgorithmMeasureLinkById(
+    
+    input: UpdateAlgorithmMeasureLinkByIdInput!
+  ): UpdateAlgorithmMeasureLinkPayload
+
+  
+  updateAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValue(
+    
+    input: UpdateAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValueInput!
+  ): UpdateAlgorithmMeasureLinkPayload
+
+  
+  updateAlgorithmPropertyLinkById(
+    
+    input: UpdateAlgorithmPropertyLinkByIdInput!
+  ): UpdateAlgorithmPropertyLinkPayload
+
+  
+  updateAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyId(
+    
+    input: UpdateAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyIdInput!
+  ): UpdateAlgorithmPropertyLinkPayload
+
+
+  updateDbupjournalDmlBySchemaversionsid(
+    
+    input: UpdateDbupjournalDmlBySchemaversionsidInput!
+  ): UpdateDbupjournalDmlPayload
+
+  
+  updateMeasureLinkById(
+    
+    input: UpdateMeasureLinkByIdInput!
+  ): UpdateMeasureLinkPayload
+
+  
+  updateMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValue(
+    
+    input: UpdateMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValueInput!
+  ): UpdateMeasureLinkPayload
+
+  
+  updateNodelinkPvalueById(
+    
+    input: UpdateNodelinkPvalueByIdInput!
+  ): UpdateNodelinkPvaluePayload
+
+  
+  deleteAlgorithmMeasureLinkById(
+    
+    input: DeleteAlgorithmMeasureLinkByIdInput!
+  ): DeleteAlgorithmMeasureLinkPayload
+
+ 
+  deleteAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValue(
+    
+    input: DeleteAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValueInput!
+  ): DeleteAlgorithmMeasureLinkPayload
+
+ 
+  deleteAlgorithmPropertyLinkById(
+    
+    input: DeleteAlgorithmPropertyLinkByIdInput!
+  ): DeleteAlgorithmPropertyLinkPayload
+
+  
+  deleteAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyId(
+    
+    input: DeleteAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyIdInput!
+  ): DeleteAlgorithmPropertyLinkPayload
+
+  
+  deleteDbupjournalDmlBySchemaversionsid(
+    
+    input: DeleteDbupjournalDmlBySchemaversionsidInput!
+  ): DeleteDbupjournalDmlPayload
+
+  
+  deleteMeasureLinkById(
+    
+    input: DeleteMeasureLinkByIdInput!
+  ): DeleteMeasureLinkPayload
+
+  
+  deleteMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValue(
+    
+    input: DeleteMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValueInput!
+  ): DeleteMeasureLinkPayload
+
+  
+  deleteNodelinkPvalueById(
+    
+    input: DeleteNodelinkPvalueByIdInput!
+  ): DeleteNodelinkPvaluePayload
+  deleteFunction(
+    
+    input: DeleteFunctionInput!
+  ): DeleteFunctionPayload
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  deleteTenant(
+    
+    input: DeleteTenantInput!
+  ): DeleteTenantPayload
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  upsertFunction(
+   
+    input: UpsertFunctionInput!
+  ): UpsertFunctionPayload
+    @deprecated(reason: "Use thing/alarm/dictionnary apis instead.")
+  upsertNodelinks(
+    
+    input: UpsertNodelinksInput!
+  ): UpsertNodelinksPayload
+  updateNotificationPreferences(
+    appContext: [EMCP_TopoNodeContextInput!]!
+    input: EMCP_UpdateNotificationPreferenceInput!
+  ): EMCP_NotificationPreference!
+  acknowledgeAlarmInstance(
+    appContext: [EMCP_TopoNodeContextInput]
+    hierarchyMode: EMCP_HierarchyMode
+    input: EMCP_AcknowledgeAlarmInstanceInput
+  ): EMCP_AlarmInstance
+  upsertAlarmInstancesAndOccurrences(
+    inputs: [EMCP_UpsertAlarmMutationInput]
+  ): [EMCP_AlarmOccurrence]
+}
+
+type IdmsInfo {
+  name: String
+  email: String
+  locale: String
+}
+
+type SubscriptionModule {
+  id: Int!
+  name: String
+  tenantId: Int!
+  isActive: Boolean!
+  reason: String
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input SubscriptionModuleFilterInput {
+  and: [SubscriptionModuleFilterInput!]
+  or: [SubscriptionModuleFilterInput!]
+  id: ComparableInt32OperationFilterInput
+  name: StringOperationFilterInput
+  tenantId: ComparableInt32OperationFilterInput
+  isActive: BooleanOperationFilterInput
+  reason: StringOperationFilterInput
+}
+
+type EMCP_NodeInfoDetailType {
+  dataType: String
+  key: String
+  label: String
+  position: Int!
+  unitId: Int!
+  value: String
+}
+
+type EMCP_NodeInfoType {
+  id: Int!
+  nodeInfoDetail: [EMCP_NodeInfoDetailType]
+  parentId: Int!
+}
+
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+}
+
+
+type CollectionSegmentInfo {
+  
+  hasNextPage: Boolean!
+
+  
+  hasPreviousPage: Boolean!
+}
+
+type EMCP_Access {
+  id: Int!
+  assigneesCount: Int!
+  scopes: Any
+  name: String!
+  description: String
+  isEditable: Boolean!
+  tenantId: Int
+  tenant: EMCP_Thing
+}
+
+type EMCP_AccessAssignment {
+  id: Int!
+  subjectId: Int!
+  roleId: Int!
+  accessId: Int!
+  createdBy: Int
+  updatedBy: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: EMCP_AccessAssignmentStatusType!
+  access: EMCP_Access
+  role: EMCP_Role
+  subject: EMCP_Subject
+}
+
+type EMCP_AccessAssignmentCollectionSegment {
+  items: [EMCP_AccessAssignment!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_AccessCollectionSegment {
+  items: [EMCP_Access!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_Action {
+  id: Int!
+  name: String!
+  description: String
+}
+
+type EMCP_Permission {
+  id: Int!
+  name: String!
+  description: String
+  actionId: Int!
+  resourceId: Int!
+  restrictedToTenants: Boolean!
+  action: EMCP_Action
+  resource: EMCP_Resource
+}
+
+type EMCP_Resource {
+  id: Int!
+  name: String!
+  label: String!
+  description: String
+}
+
+type EMCP_Role {
+  id: Int!
+  permissions: [EMCP_Permission]
+  name: String!
+  description: String
+  isEditable: Boolean!
+  isAssignable: Boolean!
+  tenantId: Int
+  roleType: EMCP_RoleTypeEnum!
+}
+
+type EMCP_RoleCollectionSegment {
+  items: [EMCP_Role!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+input ComparableEMCP_DateTimeOffsetOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime!]
+  nin: [DateTime!]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableEMCP_Int32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableEMCP_NullableOfDoubleOperationFilterInput {
+  eq: Float
+  neq: Float
+  in: [Float]
+  nin: [Float]
+  gt: Float
+  ngt: Float
+  gte: Float
+  ngte: Float
+  lt: Float
+  nlt: Float
+  lte: Float
+  nlte: Float
+}
+
+input ComparableEMCP_NullableOfInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input EMCP_AccessAssignmentFilterInput {
+  and: [EMCP_AccessAssignmentFilterInput!]
+  or: [EMCP_AccessAssignmentFilterInput!]
+  status: EMCP_AccessAssignmentStatusTypeOperationFilterInput
+  subject: EMCP_SubjectFilterInput
+  role: EMCP_RoleFilterInput
+}
+
+input EMCP_AccessAssignmentMutationInput {
+  assignmentId: Int
+  accessId: Int
+  subjectId: Int
+  email: String
+  roleId: Int
+  tenantId: Int
+  status: EMCP_AccessAssignmentStatusType
+}
+
+input EMCP_AccessAssignmentSortInput {
+  id: SortEnumType
+  subjectId: SortEnumType
+  roleId: SortEnumType
+  accessId: SortEnumType
+  createdBy: SortEnumType
+  updatedBy: SortEnumType
+  createdAt: SortEnumType
+  updatedAt: SortEnumType
+  status: SortEnumType
+  access: EMCP_AccessSortInput
+  createdByNavigation: EMCP_SubjectSortInput
+  role: EMCP_RoleSortInput
+  subject: EMCP_SubjectSortInput
+  updatedByNavigation: EMCP_SubjectSortInput
+}
+
+input EMCP_AccessAssignmentStatusTypeOperationFilterInput {
+  eq: EMCP_AccessAssignmentStatusType
+  neq: EMCP_AccessAssignmentStatusType
+  in: [EMCP_AccessAssignmentStatusType!]
+  nin: [EMCP_AccessAssignmentStatusType!]
+}
+
+input EMCP_AccessFilterInput {
+  and: [EMCP_AccessFilterInput!]
+  or: [EMCP_AccessFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  scopes: EMCP_StringOperationFilterInput
+  isEditable: EMCP_BooleanOperationFilterInput
+  tenantId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  accessAssignments: ListEMCP_FilterInputTypeOfAccessAssignmentFilterInput
+}
+
+input EMCP_AccessMutationInput {
+  accessId: Int
+  newAccessId: Int
+  scopes: [EMCP_ScopeInput!]
+  name: String
+  description: String
+  isEditable: Boolean
+}
+
+input EMCP_AccessSortInput {
+  id: SortEnumType
+  name: SortEnumType
+  description: SortEnumType
+  scopes: SortEnumType
+  isEditable: SortEnumType
+  tenantId: SortEnumType
+}
+
+input EMCP_AccessTypeOperationFilterInput {
+  eq: EMCP_AccessType
+  neq: EMCP_AccessType
+  in: [EMCP_AccessType!]
+  nin: [EMCP_AccessType!]
+}
+
+input EMCP_AccumulationTypeOperationFilterInput {
+  eq: EMCP_AccumulationType
+  neq: EMCP_AccumulationType
+  in: [EMCP_AccumulationType!]
+  nin: [EMCP_AccumulationType!]
+}
+
+input EMCP_ActionFilterInput {
+  and: [EMCP_ActionFilterInput!]
+  or: [EMCP_ActionFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  permissions: ListEMCP_FilterInputTypeOfPermissionFilterInput
+}
+
+input EMCP_AlarmConceptFilterInput {
+  and: [EMCP_AlarmConceptFilterInput!]
+  or: [EMCP_AlarmConceptFilterInput!]
+  alarmEventConceptCategoryId: ComparableEMCP_Int32OperationFilterInput
+  alarmEventConceptTypeId: ComparableEMCP_Int32OperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  icon: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  measureUrns: ListEMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyUrns: ListEMCP_StringOperationFilterInput
+  ui: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  version: ComparableEMCP_NullableOfInt32OperationFilterInput
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategoryFilterInput
+  alarmEventConceptType: EMCP_AlarmEventConceptTypeFilterInput
+  package: EMCP_PackageFilterInput
+  alarmMappings: ListEMCP_FilterInputTypeOfAlarmMappingFilterInput
+  alarmPropertyLinks: ListEMCP_FilterInputTypeOfAlarmPropertyLinkFilterInput
+}
+
+input EMCP_AlarmEventConceptCategoryFilterInput {
+  and: [EMCP_AlarmEventConceptCategoryFilterInput!]
+  or: [EMCP_AlarmEventConceptCategoryFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_AlarmEventConceptTypeFilterInput {
+  and: [EMCP_AlarmEventConceptTypeFilterInput!]
+  or: [EMCP_AlarmEventConceptTypeFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  alarmConcepts: ListEMCP_FilterInputTypeOfAlarmConceptFilterInput
+}
+
+input EMCP_AlarmMappingFilterInput {
+  and: [EMCP_AlarmMappingFilterInput!]
+  or: [EMCP_AlarmMappingFilterInput!]
+  alarmConceptId: ComparableEMCP_Int32OperationFilterInput
+  encoding: EMCP_StringOperationFilterInput
+  kind: EMCP_NullableOfMappingKindTypeOperationFilterInput
+  mapper: EMCP_StringOperationFilterInput
+  mappingState: EMCP_MappingStateTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  properties: EMCP_StringOperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  alarmConcept: EMCP_AlarmConceptFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_AlarmPropertyLinkFilterInput {
+  and: [EMCP_AlarmPropertyLinkFilterInput!]
+  or: [EMCP_AlarmPropertyLinkFilterInput!]
+  access: EMCP_NullableOfAccessTypeOperationFilterInput
+  alarmConceptId: ComparableEMCP_Int32OperationFilterInput
+  defFVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  defIVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  defSVal: EMCP_StringOperationFilterInput
+  mandatory: EMCP_BooleanOperationFilterInput
+  ordering: EMCP_NullableOfOrderingTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  visible: EMCP_NullableOfVisibleTypeOperationFilterInput
+  alarmConcept: EMCP_AlarmConceptFilterInput
+  package: EMCP_PackageFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_AlgorithmMeasureLinkFilterInput {
+  and: [EMCP_AlgorithmMeasureLinkFilterInput!]
+  or: [EMCP_AlgorithmMeasureLinkFilterInput!]
+  algorithmConceptId: ComparableEMCP_Int32OperationFilterInput
+  equipmentConceptId: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  inputMeasureId: ComparableEMCP_Int32OperationFilterInput
+  inputTagId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  inputTagValue: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  algorithmConcept: EMCP_ConceptFilterInput
+  equipmentConcept: EMCP_ConceptFilterInput
+  inputMeasure: EMCP_MeasureFilterInput
+  inputTag: EMCP_TagFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_AlgorithmPropertyLinkFilterInput {
+  and: [EMCP_AlgorithmPropertyLinkFilterInput!]
+  or: [EMCP_AlgorithmPropertyLinkFilterInput!]
+  algorithmConceptId: ComparableEMCP_Int32OperationFilterInput
+  equipmentConceptId: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  inputPropertyId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  algorithmConcept: EMCP_ConceptFilterInput
+  equipmentConcept: EMCP_ConceptFilterInput
+  inputProperty: EMCP_PropertyFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+input EMCP_BusinessQuantityFilterInput {
+  and: [EMCP_BusinessQuantityFilterInput!]
+  or: [EMCP_BusinessQuantityFilterInput!]
+  commodity: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  businessQuantityPriorities: ListEMCP_FilterInputTypeOfBusinessQuantityPriorityFilterInput
+  tableGadgetItems: ListEMCP_FilterInputTypeOfTableGadgetItemFilterInput
+}
+
+input EMCP_BusinessQuantityPriorityFilterInput {
+  and: [EMCP_BusinessQuantityPriorityFilterInput!]
+  or: [EMCP_BusinessQuantityPriorityFilterInput!]
+  businessQuantityId: ComparableEMCP_Int32OperationFilterInput
+  historicalPriority: ComparableEMCP_NullableOfInt32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  measureId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  realTimePriority: ComparableEMCP_NullableOfInt32OperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  businessQuantity: EMCP_BusinessQuantityFilterInput
+  measure: EMCP_MeasureFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_ConceptFilterInput {
+  and: [EMCP_ConceptFilterInput!]
+  or: [EMCP_ConceptFilterInput!]
+  conceptKind: EMCP_ConceptKindTypeOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  icon: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  inherit: EMCP_BooleanOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  parentConceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  ui: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  version: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  parentConcept: EMCP_ConceptFilterInput
+  algorithmConceptAlgorithmMeasureLinks: ListEMCP_FilterInputTypeOfAlgorithmMeasureLinkFilterInput
+  algorithmConceptAlgorithmPropertyLinks: ListEMCP_FilterInputTypeOfAlgorithmPropertyLinkFilterInput
+  properties: ListEMCP_FilterInputTypeOfPropertyFilterInput
+  dstConceptConceptLinks: ListEMCP_FilterInputTypeOfConceptLinkFilterInput
+  equipmentConceptAlgorithmMeasureLinks: ListEMCP_FilterInputTypeOfAlgorithmMeasureLinkFilterInput
+  equipmentConceptAlgorithmPropertyLinks: ListEMCP_FilterInputTypeOfAlgorithmPropertyLinkFilterInput
+  concepts: ListEMCP_FilterInputTypeOfConceptFilterInput
+  srcConceptConceptLinks: ListEMCP_FilterInputTypeOfConceptLinkFilterInput
+}
+
+input EMCP_ConceptKindTypeOperationFilterInput {
+  eq: EMCP_ConceptKindType
+  neq: EMCP_ConceptKindType
+  in: [EMCP_ConceptKindType!]
+  nin: [EMCP_ConceptKindType!]
+}
+
+input EMCP_ConceptLinkFilterInput {
+  and: [EMCP_ConceptLinkFilterInput!]
+  or: [EMCP_ConceptLinkFilterInput!]
+  dstConceptId: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  instancePrefix: EMCP_StringOperationFilterInput
+  linkKind: EMCP_ConceptLinkKindTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  srcConceptId: ComparableEMCP_Int32OperationFilterInput
+  dstConcept: EMCP_ConceptFilterInput
+  package: EMCP_PackageFilterInput
+  srcConcept: EMCP_ConceptFilterInput
+}
+
+input EMCP_ConceptLinkKindTypeOperationFilterInput {
+  eq: EMCP_ConceptLinkKindType
+  neq: EMCP_ConceptLinkKindType
+  in: [EMCP_ConceptLinkKindType!]
+  nin: [EMCP_ConceptLinkKindType!]
+}
+
+input EMCP_ConceptSortInput {
+  conceptKind: SortEnumType
+  description: SortEnumType
+  icon: SortEnumType
+  id: SortEnumType
+  inherit: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  parentConceptId: SortEnumType
+  ui: SortEnumType
+  urn: SortEnumType
+  version: SortEnumType
+  package: EMCP_PackageSortInput
+  parentConcept: EMCP_ConceptSortInput
+}
+
+input EMCP_CountryFilterInput {
+  and: [EMCP_CountryFilterInput!]
+  or: [EMCP_CountryFilterInput!]
+  alpha2Code: EMCP_StringOperationFilterInput
+  alpha3Code: EMCP_StringOperationFilterInput
+  countryCode: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  intermediateRegion: EMCP_StringOperationFilterInput
+  intermediateRegionCode: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  region: EMCP_StringOperationFilterInput
+  regionCode: EMCP_StringOperationFilterInput
+  subRegion: EMCP_StringOperationFilterInput
+  subRegionCode: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  currencyCountryLinks: ListEMCP_FilterInputTypeOfCurrencyCountryLinkFilterInput
+  unitCountryLinks: ListEMCP_FilterInputTypeOfUnitCountryLinkFilterInput
+}
+
+input EMCP_CurrencyCountryLinkFilterInput {
+  and: [EMCP_CurrencyCountryLinkFilterInput!]
+  or: [EMCP_CurrencyCountryLinkFilterInput!]
+  countryId: ComparableEMCP_Int32OperationFilterInput
+  currencyId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  country: EMCP_CountryFilterInput
+  currency: EMCP_CurrencyFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_CurrencyFilterInput {
+  and: [EMCP_CurrencyFilterInput!]
+  or: [EMCP_CurrencyFilterInput!]
+  alphaCode: EMCP_StringOperationFilterInput
+  decimalPlaces: ComparableEMCP_NullableOfInt32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  numericCode: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  symbol: EMCP_StringOperationFilterInput
+  visible: EMCP_VisibleTypeOperationFilterInput
+  package: EMCP_PackageFilterInput
+  currencyCountryLinks: ListEMCP_FilterInputTypeOfCurrencyCountryLinkFilterInput
+}
+
+input EMCP_EncodingTypeOperationFilterInput {
+  eq: EMCP_EncodingType
+  neq: EMCP_EncodingType
+  in: [EMCP_EncodingType!]
+  nin: [EMCP_EncodingType!]
+}
+
+input EMCP_EnumDescriptionFilterInput {
+  and: [EMCP_EnumDescriptionFilterInput!]
+  or: [EMCP_EnumDescriptionFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  enumItemId: EMCP_StringOperationFilterInput
+  enumValueId: ComparableEMCP_Int32OperationFilterInput
+  enumValueName: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  parentEnumNameUrn: EMCP_StringOperationFilterInput
+  ui: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  parentEnumName: EMCP_PropertyFilterInput
+}
+
+input EMCP_EventConceptFilterInput {
+  and: [EMCP_EventConceptFilterInput!]
+  or: [EMCP_EventConceptFilterInput!]
+  alarmEventConceptCategoryId: ComparableEMCP_Int32OperationFilterInput
+  alarmEventConceptTypeId: ComparableEMCP_Int32OperationFilterInput
+  class: ComparableEMCP_NullableOfInt32OperationFilterInput
+  defaultCause: EMCP_StringOperationFilterInput
+  defaultEffect: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  icon: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  kind: ComparableEMCP_NullableOfInt32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  measureUrns: ListEMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyUrns: ListEMCP_StringOperationFilterInput
+  signal: EMCP_StringOperationFilterInput
+  ui: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  userPriority: ComparableEMCP_NullableOfInt32OperationFilterInput
+  version: ComparableEMCP_NullableOfInt32OperationFilterInput
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategoryFilterInput
+  alarmEventConceptType: EMCP_AlarmEventConceptTypeFilterInput
+  package: EMCP_PackageFilterInput
+  eventMappings: ListEMCP_FilterInputTypeOfEventMappingFilterInput
+  eventPropertyLinks: ListEMCP_FilterInputTypeOfEventPropertyLinkFilterInput
+}
+
+input EMCP_EventMappingFilterInput {
+  and: [EMCP_EventMappingFilterInput!]
+  or: [EMCP_EventMappingFilterInput!]
+  encoding: EMCP_StringOperationFilterInput
+  eventConceptId: ComparableEMCP_Int32OperationFilterInput
+  kind: EMCP_NullableOfMappingKindTypeOperationFilterInput
+  mapper: EMCP_StringOperationFilterInput
+  mappingState: EMCP_MappingStateTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  properties: EMCP_StringOperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  eventConcept: EMCP_EventConceptFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_EventPropertyLinkFilterInput {
+  and: [EMCP_EventPropertyLinkFilterInput!]
+  or: [EMCP_EventPropertyLinkFilterInput!]
+  access: EMCP_NullableOfAccessTypeOperationFilterInput
+  defFVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  defIVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  defSVal: EMCP_StringOperationFilterInput
+  eventConceptId: ComparableEMCP_Int32OperationFilterInput
+  mandatory: EMCP_BooleanOperationFilterInput
+  ordering: EMCP_NullableOfOrderingTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  visible: EMCP_NullableOfVisibleTypeOperationFilterInput
+  eventConcept: EMCP_EventConceptFilterInput
+  package: EMCP_PackageFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_FacetTypeOperationFilterInput {
+  eq: EMCP_FacetType
+  neq: EMCP_FacetType
+  in: [EMCP_FacetType!]
+  nin: [EMCP_FacetType!]
+}
+
+input EMCP_GroupAssignmentMutationInput {
+  groupId: Int!
+  email: String
+}
+
+input EMCP_MValueMappingFilterInput {
+  and: [EMCP_MValueMappingFilterInput!]
+  or: [EMCP_MValueMappingFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  mapping: EMCP_StringOperationFilterInput
+  measureId: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  property1Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property1SVal: EMCP_StringOperationFilterInput
+  property2Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property2SVal: EMCP_StringOperationFilterInput
+  property3Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property3SVal: EMCP_StringOperationFilterInput
+  measure: EMCP_MeasureFilterInput
+  package: EMCP_PackageFilterInput
+  property1: EMCP_PropertyFilterInput
+  property2: EMCP_PropertyFilterInput
+  property3: EMCP_PropertyFilterInput
+}
+
+input EMCP_MappingKindTypeOperationFilterInput {
+  eq: EMCP_MappingKindType
+  neq: EMCP_MappingKindType
+  in: [EMCP_MappingKindType!]
+  nin: [EMCP_MappingKindType!]
+}
+
+input EMCP_MappingStateTypeOperationFilterInput {
+  eq: EMCP_MappingStateType
+  neq: EMCP_MappingStateType
+  in: [EMCP_MappingStateType!]
+  nin: [EMCP_MappingStateType!]
+}
+
+input EMCP_MeasureFilterInput {
+  and: [EMCP_MeasureFilterInput!]
+  or: [EMCP_MeasureFilterInput!]
+  accumulation: EMCP_AccumulationTypeOperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  encoding: EMCP_EncodingTypeOperationFilterInput
+  enumParent: ComparableEMCP_NullableOfInt32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  statistical: EMCP_StatisticalTypeOperationFilterInput
+  timeAggregation: EMCP_TimeAggregationTypeOperationFilterInput
+  uiPreferenceId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  unitId: ComparableEMCP_Int32OperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  enumParentProperty: EMCP_PropertyFilterInput
+  package: EMCP_PackageFilterInput
+  uiPreference: EMCP_UiPreferenceFilterInput
+  unit: EMCP_UnitFilterInput
+  algorithmMeasureLinks: ListEMCP_FilterInputTypeOfAlgorithmMeasureLinkFilterInput
+  measureLinks: ListEMCP_FilterInputTypeOfMeasureLinkFilterInput
+  businessQuantityPriorities: ListEMCP_FilterInputTypeOfBusinessQuantityPriorityFilterInput
+  measureMappings: ListEMCP_FilterInputTypeOfMeasureMappingFilterInput
+  mValueMappings: ListEMCP_FilterInputTypeOfMValueMappingFilterInput
+}
+
+input EMCP_MeasureLinkFilterInput {
+  and: [EMCP_MeasureLinkFilterInput!]
+  or: [EMCP_MeasureLinkFilterInput!]
+  conceptId: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  measureId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  tagId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  measure: EMCP_MeasureFilterInput
+  package: EMCP_PackageFilterInput
+  tag: EMCP_TagFilterInput
+}
+
+input EMCP_MeasureMappingFilterInput {
+  and: [EMCP_MeasureMappingFilterInput!]
+  or: [EMCP_MeasureMappingFilterInput!]
+  encoding: EMCP_NullableOfEncodingTypeOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  kind: EMCP_NullableOfMappingKindTypeOperationFilterInput
+  mapper: EMCP_StringOperationFilterInput
+  mappingState: EMCP_MappingStateTypeOperationFilterInput
+  measureId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  properties: EMCP_StringOperationFilterInput
+  propertyMappings: EMCP_StringOperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  measure: EMCP_MeasureFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_NullableOfAccessTypeOperationFilterInput {
+  eq: EMCP_AccessType
+  neq: EMCP_AccessType
+  in: [EMCP_AccessType]
+  nin: [EMCP_AccessType]
+}
+
+input EMCP_NullableOfEncodingTypeOperationFilterInput {
+  eq: EMCP_EncodingType
+  neq: EMCP_EncodingType
+  in: [EMCP_EncodingType]
+  nin: [EMCP_EncodingType]
+}
+
+input EMCP_NullableOfMappingKindTypeOperationFilterInput {
+  eq: EMCP_MappingKindType
+  neq: EMCP_MappingKindType
+  in: [EMCP_MappingKindType]
+  nin: [EMCP_MappingKindType]
+}
+
+input EMCP_NullableOfOrderingTypeOperationFilterInput {
+  eq: EMCP_OrderingType
+  neq: EMCP_OrderingType
+  in: [EMCP_OrderingType]
+  nin: [EMCP_OrderingType]
+}
+
+input EMCP_NullableOfQuantityNameTypeOperationFilterInput {
+  eq: EMCP_QuantityNameType
+  neq: EMCP_QuantityNameType
+  in: [EMCP_QuantityNameType]
+  nin: [EMCP_QuantityNameType]
+}
+
+input EMCP_NullableOfVisibleTypeOperationFilterInput {
+  eq: EMCP_VisibleType
+  neq: EMCP_VisibleType
+  in: [EMCP_VisibleType]
+  nin: [EMCP_VisibleType]
+}
+
+input EMCP_OrderingTypeOperationFilterInput {
+  eq: EMCP_OrderingType
+  neq: EMCP_OrderingType
+  in: [EMCP_OrderingType!]
+  nin: [EMCP_OrderingType!]
+}
+
+input EMCP_PackageFilterInput {
+  and: [EMCP_PackageFilterInput!]
+  or: [EMCP_PackageFilterInput!]
+  author: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  org: EMCP_StringOperationFilterInput
+  parentPackageId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  version: EMCP_StringOperationFilterInput
+  unitCountryLinks: ListEMCP_FilterInputTypeOfUnitCountryLinkFilterInput
+}
+
+input EMCP_PackageSortInput {
+  author: SortEnumType
+  description: SortEnumType
+  id: SortEnumType
+  name: SortEnumType
+  org: SortEnumType
+  parentPackageId: SortEnumType
+  urn: SortEnumType
+  version: SortEnumType
+}
+
+input EMCP_PermissionFilterInput {
+  and: [EMCP_PermissionFilterInput!]
+  or: [EMCP_PermissionFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  actionId: ComparableEMCP_Int32OperationFilterInput
+  resourceId: ComparableEMCP_Int32OperationFilterInput
+  restrictedToTenants: EMCP_BooleanOperationFilterInput
+  action: EMCP_ActionFilterInput
+  resource: EMCP_ResourceFilterInput
+}
+
+input EMCP_PropertyFilterInput {
+  and: [EMCP_PropertyFilterInput!]
+  or: [EMCP_PropertyFilterInput!]
+  accessType: EMCP_AccessTypeOperationFilterInput
+  encodingType: EMCP_EncodingTypeOperationFilterInput
+  facetType: EMCP_FacetTypeOperationFilterInput
+  orderingType: EMCP_OrderingTypeOperationFilterInput
+  conceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  defFVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  defIVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  defSVal: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  enumUrn: EMCP_StringOperationFilterInput
+  example: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  mandatory: EMCP_BooleanOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyRangeId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  uiPreferenceId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  unitId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  visible: EMCP_VisibleTypeOperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  package: EMCP_PackageFilterInput
+  propertyRange: EMCP_PropertyRangeFilterInput
+  uiPreference: EMCP_UiPreferenceFilterInput
+  unit: EMCP_UnitFilterInput
+  measures: ListEMCP_FilterInputTypeOfMeasureFilterInput
+  algorithmPropertyLinks: ListEMCP_FilterInputTypeOfAlgorithmPropertyLinkFilterInput
+  enumDescriptions: ListEMCP_FilterInputTypeOfEnumDescriptionFilterInput
+  alarmPropertyLinks: ListEMCP_FilterInputTypeOfAlarmPropertyLinkFilterInput
+  eventPropertyLinks: ListEMCP_FilterInputTypeOfEventPropertyLinkFilterInput
+  propertyLinks: ListEMCP_FilterInputTypeOfPropertyLinkFilterInput
+  propertyMappings: ListEMCP_FilterInputTypeOfPropertyMappingFilterInput
+  topoNodes: ListEMCP_FilterInputTypeOfTopoNodeFilterInput
+}
+
+input EMCP_PropertyLinkFilterInput {
+  and: [EMCP_PropertyLinkFilterInput!]
+  or: [EMCP_PropertyLinkFilterInput!]
+  access: EMCP_NullableOfAccessTypeOperationFilterInput
+  conceptId: ComparableEMCP_Int32OperationFilterInput
+  defFVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  defIVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  defSVal: EMCP_StringOperationFilterInput
+  mandatory: EMCP_BooleanOperationFilterInput
+  ordering: EMCP_NullableOfOrderingTypeOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  uiPreferenceId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  visible: EMCP_NullableOfVisibleTypeOperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  package: EMCP_PackageFilterInput
+  property: EMCP_PropertyFilterInput
+  uiPreference: EMCP_UiPreferenceFilterInput
+}
+
+input EMCP_PropertyMappingFilterInput {
+  and: [EMCP_PropertyMappingFilterInput!]
+  or: [EMCP_PropertyMappingFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  kind: EMCP_MappingKindTypeOperationFilterInput
+  mapper: EMCP_StringOperationFilterInput
+  mapperDescription: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_PropertyRangeFilterInput {
+  and: [EMCP_PropertyRangeFilterInput!]
+  or: [EMCP_PropertyRangeFilterInput!]
+  decimalDigits: ComparableEMCP_NullableOfInt32OperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  encoding: EMCP_NullableOfEncodingTypeOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  jsonSchema: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  maxTs: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  maxValue: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  minTs: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  minValue: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  regExp: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  wholeDigits: ComparableEMCP_NullableOfInt32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  properties: ListEMCP_FilterInputTypeOfPropertyFilterInput
+}
+
+input EMCP_ResourceFilterInput {
+  and: [EMCP_ResourceFilterInput!]
+  or: [EMCP_ResourceFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  permissions: ListEMCP_FilterInputTypeOfPermissionFilterInput
+}
+
+input EMCP_RoleFilterInput {
+  and: [EMCP_RoleFilterInput!]
+  or: [EMCP_RoleFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  isEditable: EMCP_BooleanOperationFilterInput
+  isAssignable: EMCP_BooleanOperationFilterInput
+  tenantId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  roleType: EMCP_RoleTypeEnumOperationFilterInput
+}
+
+input EMCP_RoleSortInput {
+  id: SortEnumType
+  name: SortEnumType
+  description: SortEnumType
+  isEditable: SortEnumType
+  isAssignable: SortEnumType
+  tenantId: SortEnumType
+  roleType: SortEnumType
+}
+
+input EMCP_RoleTypeEnumOperationFilterInput {
+  eq: EMCP_RoleTypeEnum
+  neq: EMCP_RoleTypeEnum
+  in: [EMCP_RoleTypeEnum!]
+  nin: [EMCP_RoleTypeEnum!]
+}
+
+input EMCP_ScopeInput {
+  type: EMCP_FilterType!
+  urn: String
+  id: Int!
+}
+
+input EMCP_StatisticalTypeOperationFilterInput {
+  eq: EMCP_StatisticalType
+  neq: EMCP_StatisticalType
+  in: [EMCP_StatisticalType!]
+  nin: [EMCP_StatisticalType!]
+}
+
+input EMCP_StringOperationFilterInput {
+  and: [EMCP_StringOperationFilterInput!]
+  or: [EMCP_StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input EMCP_SubjectFilterInput {
+  and: [EMCP_SubjectFilterInput!]
+  or: [EMCP_SubjectFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  conceptId: ComparableEMCP_Int32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  subjectPropertyValues: ListEMCP_FilterInputTypeOfSubjectPropertyValueFilterInput
+}
+
+input EMCP_SubjectPropertyValueFilterInput {
+  and: [EMCP_SubjectPropertyValueFilterInput!]
+  or: [EMCP_SubjectPropertyValueFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  subjectId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  pfval: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  psval: EMCP_StringOperationFilterInput
+  pival: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property: EMCP_PropertyFilterInput
+  subject: EMCP_SubjectFilterInput
+}
+
+input EMCP_SubjectSortInput {
+  id: SortEnumType
+  conceptId: SortEnumType
+  createDate: SortEnumType
+  updateDate: SortEnumType
+  concept: EMCP_ConceptSortInput
+}
+
+input EMCP_TableGadgetFilterInput {
+  and: [EMCP_TableGadgetFilterInput!]
+  or: [EMCP_TableGadgetFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  tableGadgetItems: ListEMCP_FilterInputTypeOfTableGadgetItemFilterInput
+  tableGadgetMappings: ListEMCP_FilterInputTypeOfTableGadgetMappingFilterInput
+}
+
+input EMCP_TableGadgetItemFilterInput {
+  and: [EMCP_TableGadgetItemFilterInput!]
+  or: [EMCP_TableGadgetItemFilterInput!]
+  businessQuantityIsLogged: EMCP_BooleanOperationFilterInput
+  businessQuantityId: ComparableEMCP_Int32OperationFilterInput
+  historicalQuery: EMCP_BooleanOperationFilterInput
+  key: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  mustHaveData: EMCP_BooleanOperationFilterInput
+  mustHaveSlot: EMCP_BooleanOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  position: ComparableEMCP_Int32OperationFilterInput
+  tableGadgetId: ComparableEMCP_Int32OperationFilterInput
+  businessQuantity: EMCP_BusinessQuantityFilterInput
+  package: EMCP_PackageFilterInput
+  tableGadget: EMCP_TableGadgetFilterInput
+}
+
+input EMCP_TableGadgetMappingFilterInput {
+  and: [EMCP_TableGadgetMappingFilterInput!]
+  or: [EMCP_TableGadgetMappingFilterInput!]
+  conceptId: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  kind: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  property1FVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  property1Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property1IVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property1SVal: EMCP_StringOperationFilterInput
+  property2FVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  property2Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property2IVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property2SVal: EMCP_StringOperationFilterInput
+  property3FVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  property3Id: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property3IVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  property3SVal: EMCP_StringOperationFilterInput
+  tableGadgetId: ComparableEMCP_Int32OperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  package: EMCP_PackageFilterInput
+  property1: EMCP_PropertyFilterInput
+  property2: EMCP_PropertyFilterInput
+  property3: EMCP_PropertyFilterInput
+  tableGadget: EMCP_TableGadgetFilterInput
+}
+
+input EMCP_TagFilterInput {
+  and: [EMCP_TagFilterInput!]
+  or: [EMCP_TagFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  version: ComparableEMCP_NullableOfInt32OperationFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_TimeAggregationTypeOperationFilterInput {
+  eq: EMCP_TimeAggregationType
+  neq: EMCP_TimeAggregationType
+  in: [EMCP_TimeAggregationType!]
+  nin: [EMCP_TimeAggregationType!]
+}
+
+input EMCP_TopoNodeContextInput {
+  id: Int!
+  type: EMCP_FilterType!
+  urn: String!
+  name: String
+  label: String
+  value: String
+}
+
+input EMCP_TopoNodeFilterInput {
+  and: [EMCP_TopoNodeFilterInput!]
+  or: [EMCP_TopoNodeFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  level: ComparableEMCP_NullableOfInt32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  topoId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  property: EMCP_PropertyFilterInput
+  topo: EMCP_TopologyFilterInput
+}
+
+input EMCP_TopologyFilterInput {
+  and: [EMCP_TopologyFilterInput!]
+  or: [EMCP_TopologyFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  rootConceptId: ComparableEMCP_Int32OperationFilterInput
+  topoClause: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  version: ComparableEMCP_NullableOfInt32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  rootConcept: EMCP_ConceptFilterInput
+  topoNodes: ListEMCP_FilterInputTypeOfTopoNodeFilterInput
+}
+
+input EMCP_UiPreferenceFilterInput {
+  and: [EMCP_UiPreferenceFilterInput!]
+  or: [EMCP_UiPreferenceFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  preference: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  measures: ListEMCP_FilterInputTypeOfMeasureFilterInput
+  properties: ListEMCP_FilterInputTypeOfPropertyFilterInput
+  propertyLinks: ListEMCP_FilterInputTypeOfPropertyLinkFilterInput
+}
+
+input EMCP_UnitCountryLinkFilterInput {
+  and: [EMCP_UnitCountryLinkFilterInput!]
+  or: [EMCP_UnitCountryLinkFilterInput!]
+  countryId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  preferredUnitId: ComparableEMCP_Int32OperationFilterInput
+  country: EMCP_CountryFilterInput
+  package: EMCP_PackageFilterInput
+  preferredUnit: EMCP_UnitFilterInput
+}
+
+input EMCP_UnitFilterInput {
+  and: [EMCP_UnitFilterInput!]
+  or: [EMCP_UnitFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  isSi: EMCP_BooleanOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  quantityName: EMCP_NullableOfQuantityNameTypeOperationFilterInput
+  symbol: EMCP_StringOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  unitCountryLinks: ListEMCP_FilterInputTypeOfUnitCountryLinkFilterInput
+  measures: ListEMCP_FilterInputTypeOfMeasureFilterInput
+  properties: ListEMCP_FilterInputTypeOfPropertyFilterInput
+}
+
+input EMCP_VisibleTypeOperationFilterInput {
+  eq: EMCP_VisibleType
+  neq: EMCP_VisibleType
+  in: [EMCP_VisibleType!]
+  nin: [EMCP_VisibleType!]
+}
+
+input ListEMCP_FilterInputTypeOfAccessAssignmentFilterInput {
+  all: EMCP_AccessAssignmentFilterInput
+  none: EMCP_AccessAssignmentFilterInput
+  some: EMCP_AccessAssignmentFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlarmConceptFilterInput {
+  all: EMCP_AlarmConceptFilterInput
+  none: EMCP_AlarmConceptFilterInput
+  some: EMCP_AlarmConceptFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlarmMappingFilterInput {
+  all: EMCP_AlarmMappingFilterInput
+  none: EMCP_AlarmMappingFilterInput
+  some: EMCP_AlarmMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlarmPropertyLinkFilterInput {
+  all: EMCP_AlarmPropertyLinkFilterInput
+  none: EMCP_AlarmPropertyLinkFilterInput
+  some: EMCP_AlarmPropertyLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlgorithmMeasureLinkFilterInput {
+  all: EMCP_AlgorithmMeasureLinkFilterInput
+  none: EMCP_AlgorithmMeasureLinkFilterInput
+  some: EMCP_AlgorithmMeasureLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlgorithmPropertyLinkFilterInput {
+  all: EMCP_AlgorithmPropertyLinkFilterInput
+  none: EMCP_AlgorithmPropertyLinkFilterInput
+  some: EMCP_AlgorithmPropertyLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfBusinessQuantityPriorityFilterInput {
+  all: EMCP_BusinessQuantityPriorityFilterInput
+  none: EMCP_BusinessQuantityPriorityFilterInput
+  some: EMCP_BusinessQuantityPriorityFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfConceptFilterInput {
+  all: EMCP_ConceptFilterInput
+  none: EMCP_ConceptFilterInput
+  some: EMCP_ConceptFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfConceptLinkFilterInput {
+  all: EMCP_ConceptLinkFilterInput
+  none: EMCP_ConceptLinkFilterInput
+  some: EMCP_ConceptLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfCurrencyCountryLinkFilterInput {
+  all: EMCP_CurrencyCountryLinkFilterInput
+  none: EMCP_CurrencyCountryLinkFilterInput
+  some: EMCP_CurrencyCountryLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfEnumDescriptionFilterInput {
+  all: EMCP_EnumDescriptionFilterInput
+  none: EMCP_EnumDescriptionFilterInput
+  some: EMCP_EnumDescriptionFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfEventMappingFilterInput {
+  all: EMCP_EventMappingFilterInput
+  none: EMCP_EventMappingFilterInput
+  some: EMCP_EventMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfEventPropertyLinkFilterInput {
+  all: EMCP_EventPropertyLinkFilterInput
+  none: EMCP_EventPropertyLinkFilterInput
+  some: EMCP_EventPropertyLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfMValueMappingFilterInput {
+  all: EMCP_MValueMappingFilterInput
+  none: EMCP_MValueMappingFilterInput
+  some: EMCP_MValueMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfMeasureFilterInput {
+  all: EMCP_MeasureFilterInput
+  none: EMCP_MeasureFilterInput
+  some: EMCP_MeasureFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfMeasureLinkFilterInput {
+  all: EMCP_MeasureLinkFilterInput
+  none: EMCP_MeasureLinkFilterInput
+  some: EMCP_MeasureLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfMeasureMappingFilterInput {
+  all: EMCP_MeasureMappingFilterInput
+  none: EMCP_MeasureMappingFilterInput
+  some: EMCP_MeasureMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfPermissionFilterInput {
+  all: EMCP_PermissionFilterInput
+  none: EMCP_PermissionFilterInput
+  some: EMCP_PermissionFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfPropertyFilterInput {
+  all: EMCP_PropertyFilterInput
+  none: EMCP_PropertyFilterInput
+  some: EMCP_PropertyFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfPropertyLinkFilterInput {
+  all: EMCP_PropertyLinkFilterInput
+  none: EMCP_PropertyLinkFilterInput
+  some: EMCP_PropertyLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfPropertyMappingFilterInput {
+  all: EMCP_PropertyMappingFilterInput
+  none: EMCP_PropertyMappingFilterInput
+  some: EMCP_PropertyMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfSubjectPropertyValueFilterInput {
+  all: EMCP_SubjectPropertyValueFilterInput
+  none: EMCP_SubjectPropertyValueFilterInput
+  some: EMCP_SubjectPropertyValueFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfTableGadgetItemFilterInput {
+  all: EMCP_TableGadgetItemFilterInput
+  none: EMCP_TableGadgetItemFilterInput
+  some: EMCP_TableGadgetItemFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfTableGadgetMappingFilterInput {
+  all: EMCP_TableGadgetMappingFilterInput
+  none: EMCP_TableGadgetMappingFilterInput
+  some: EMCP_TableGadgetMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfTopoNodeFilterInput {
+  all: EMCP_TopoNodeFilterInput
+  none: EMCP_TopoNodeFilterInput
+  some: EMCP_TopoNodeFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfUnitCountryLinkFilterInput {
+  all: EMCP_UnitCountryLinkFilterInput
+  none: EMCP_UnitCountryLinkFilterInput
+  some: EMCP_UnitCountryLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_StringOperationFilterInput {
+  all: EMCP_StringOperationFilterInput
+  none: EMCP_StringOperationFilterInput
+  some: EMCP_StringOperationFilterInput
+  any: Boolean
+}
+
+enum EMCP_AccessAssignmentStatusType {
+  ACTIVE
+  PENDING
+  INACTIVE
+}
+
+enum EMCP_AccessType {
+  RO
+  RW
+}
+
+enum EMCP_AccumulationType {
+  CUMULATIVE
+  INTERVAL
+  STATE
+  NA
+}
+
+enum EMCP_ConceptKindType {
+  PRODUCT
+  TENANT
+  OTHER
+  EVENT
+  ALARM
+  FUNCTION
+  LOAD
+  ALGORITHM
+  ACTION_RULE
+  BILLING
+  EXTERNAL_SOURCE
+  EQUIPMENT
+  MAINTENANCE
+  JOB
+}
+
+enum EMCP_ConceptLinkKindType {
+  CONTAINS
+  EXTENDS
+}
+
+enum EMCP_EncodingType {
+  FLOAT
+  INTEGER
+  ID
+  STRING
+  TIMESTAMP
+  ENUM
+  JSON
+}
+
+enum EMCP_FacetType {
+  GENERAL
+  REFERENCE
+  COMMUNICATION
+  ELECTRICAL
+  IDENTIFICATION
+  LOCATION
+  USAGE
+  PREFERENCE
+  PRIVATEDATA
+  CONTACT
+  MACHINE_LEARNING
+  BILLING
+  MAINTENANCE_RECORD
+  JOB
+  ENDOFLIFE
+  LIFETIME
+  MECANICAL
+  CONTROL_UNIT
+  CONTROL_UNIT_SETTINGS
+  SETTINGS
+  COMPONENT
+  PROTECTION
+  CB_PROPERTIES
+  ASSEMBLIES
+  LOCALISATION
+  PRODUCT
+  AMBIENT
+  EFRP
+  TEMPERATURE
+  NABERS
+}
+
+enum EMCP_FilterType {
+  ID
+  TENANT
+  VALUE
+}
+
+enum EMCP_MappingKindType {
+  PDM
+  ION
+  EDM1
+  EDM2
+  ALM
+  ECLASS
+  IEC61850
+  ETIM
+}
+
+enum EMCP_MappingStateType {
+  ACTIVE
+  INACTIVE
+}
+
+enum EMCP_OrderingType {
+  VISIBLE_LEVEL1
+  VISIBLE_LEVEL2
+  VISIBLE_LEVEL3
+}
+
+enum EMCP_QuantityNameType {
+  AMP_SQUARED
+  APPARENT_ENERGY
+  APPARENT_POWER
+  CURRENT
+  DENSITY
+  ELECTRIC_CAPACITANCE
+  ELECTRIC_CHARGE
+  ELECTRIC_POTENTIAL
+  ELECTRIC_RESISTANCE
+  FLOW_RATE
+  FREQUENCY
+  LENGTH
+  MASS_FLOW_RATE
+  NONE
+  PERCENTAGE
+  PLANE_ANGLE
+  PRESSURE
+  POWER_LEVEL
+  REACTIVE_ENERGY
+  REACTIVE_POWER
+  REAL_ENERGY
+  REAL_POWER
+  RELATIVE_TEMPERATURE
+  ROTATIONAL_SPEED
+  SPECIFIC_ENTHALPY
+  TIME
+  UNKNOWN
+  VOLUME
+  MASS
+  AREA
+  COST_PER_VOLUME
+  ELECTRICITY_RATE
+  CONCENTRATION
+  CURRENT_DENSITY
+  DATA_SIZE
+  ENERGY
+  HEAT_ENERGY
+  HEAT_RATE
+  ILLUMINANCE
+  INSOLATION
+  LUMINANCE
+  POWER
+  PRESSURE_CHANGE_RATE
+  RELATIVE_HUMIDITY
+  SOUND_PRESSURE_LEVEL
+  SPECIFIC_HEAT
+  TEMPERATURE_CHANGE_RATE
+  TEMPERATURE
+  THERMAL_CONDUCTIVITY
+  THERMAL_ENERGY
+  VELOCITY
+  WIND_SPEED
+}
+
+enum EMCP_RoleTypeEnum {
+  BUILT_IN
+  MODULE_BASED
+}
+
+enum EMCP_StatisticalType {
+  INTERVAL
+  ACCUMULATION
+  DEMAND
+  INSTANTANEOUS
+  MAXIMUM
+  MAXIMUM_DEMAND
+  MINIMUM
+  MINIMUM_DEMAND
+  TIME_AVERAGE
+  TIME_AVERAGE_DEMAND
+  DEMAND_SLIDING_WINDOW
+  DEMAND_BLOCK
+  NA
+}
+
+enum EMCP_TimeAggregationType {
+  AVERAGE
+  DELTA
+  SUM
+  NEGATIVE
+  NA
+}
+
+enum EMCP_VisibleType {
+  NONE
+  ON_VIEW
+  ON_EDIT
+  ON_EDIT_VIEW
+  ON_CREATE
+  ON_CREATE_VIEW
+  ON_CREATE_EDIT
+  ON_ALL
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+type EMCP_AlarmConcept {
+  icon: String @deprecated(reason: "Please use ui field instead.")
+  alarmEventConceptCategoryId: Int!
+  alarmEventConceptTypeId: Int!
+  description: String
+  id: Int!
+  label: String!
+  measureUrns: [String]
+  name: String!
+  packageId: Int!
+  propertyUrns: [String]
+  ui: String!
+  urn: String!
+  version: Int
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategory
+  alarmEventConceptType: EMCP_AlarmEventConceptType
+  package: EMCP_Package
+  alarmMappings: [EMCP_AlarmMapping]
+  alarmPropertyLinks: [EMCP_AlarmPropertyLink]
+}
+
+type EMCP_AlarmEventConceptCategory {
+  description: String
+  id: Int!
+  label: String!
+  name: String!
+  packageId: Int!
+  package: EMCP_Package
+}
+
+type EMCP_AlarmEventConceptType {
+  description: String
+  id: Int!
+  label: String!
+  name: String!
+  packageId: Int!
+  package: EMCP_Package
+  alarmConcepts: [EMCP_AlarmConcept]
+}
+
+type EMCP_AlarmMapping {
+  alarmConceptId: Int!
+  encoding: String!
+  kind: EMCP_MappingKindType
+  mapper: String
+  mappingState: EMCP_MappingStateType!
+  packageId: Int!
+  properties: String!
+  tagValue: String
+  alarmConcept: EMCP_AlarmConcept
+  package: EMCP_Package
+}
+
+type EMCP_AlarmPropertyLink {
+  access: EMCP_AccessType
+  alarmConceptId: Int!
+  defFVal: Float
+  defIVal: Int
+  defSVal: String
+  mandatory: Boolean
+  ordering: EMCP_OrderingType
+  packageId: Int!
+  propertyId: Int!
+  visible: EMCP_VisibleType
+  alarmConcept: EMCP_AlarmConcept
+  package: EMCP_Package
+  property: EMCP_Property
+}
+
+type EMCP_AlgorithmMeasureLink {
+  algorithmConceptId: Int!
+  equipmentConceptId: Int!
+  id: Int!
+  inputMeasureId: Int!
+  inputTagId: Int
+  inputTagValue: String
+  packageId: Int!
+  algorithmConcept: EMCP_Concept
+  equipmentConcept: EMCP_Concept
+  inputMeasure: EMCP_Measure
+  inputTag: EMCP_Tag
+  package: EMCP_Package
+}
+
+type EMCP_AlgorithmPropertyLink {
+  algorithmConceptId: Int!
+  equipmentConceptId: Int!
+  id: Int!
+  inputPropertyId: Int!
+  packageId: Int!
+  algorithmConcept: EMCP_Concept
+  equipmentConcept: EMCP_Concept
+  inputProperty: EMCP_Property
+  package: EMCP_Package
+}
+
+type EMCP_AssetInfo {
+  asset: EMCP_Thing
+    @deprecated(
+      reason: "Use commissionedAssets to get the list of accessible asset already registered on EMCP."
+    )
+  commissionedAssets: [EMCP_Thing]
+  basicAsset: EMCP_BasicAsset
+    @deprecated(
+      reason: "Use uncomissionedAssets to get the list of asset from ALM."
+    )
+  uncommissionedAssets: [EMCP_BasicAsset]
+}
+
+type EMCP_BasicAsset {
+  asset: EMCP_BasicThing!
+  hierarchy: [EMCP_BasicHierarchyNode!]
+}
+
+type EMCP_BasicHierarchyNode {
+  id: Int!
+  label: String!
+  type: EMCP_BasicNodeType!
+  gatewayId: Int
+  panelId: Int
+}
+
+type EMCP_BasicProperty {
+  urn: String!
+  stringValue: String
+  floatValue: Float
+  integerValue: Int
+  encoding: EMCP_EncodingType
+}
+
+type EMCP_BasicThing {
+  id: Int!
+  label: String
+  handle: String
+  conceptUrn: String!
+  properties: [EMCP_BasicProperty!]!
+}
+
+type EMCP_BusinessQuantity {
+  commodity: Int!
+  id: Int!
+  label: String!
+  name: String!
+  packageId: Int!
+  package: EMCP_Package
+  businessQuantityPriorities: [EMCP_BusinessQuantityPriority]
+  tableGadgetItems: [EMCP_TableGadgetItem]
+}
+
+type EMCP_BusinessQuantityMeasureMappingInfo {
+  thing: EMCP_Thing!
+  businessQuantityName: String!
+  gatewayThing: EMCP_Thing
+  measureMapping: EMCP_MeasureMapping
+  mValueMapping: String
+}
+
+type EMCP_BusinessQuantityPriority {
+  businessQuantityId: Int!
+  historicalPriority: Int
+  id: Int!
+  measureId: Int!
+  packageId: Int!
+  realTimePriority: Int
+  tagValue: String
+  businessQuantity: EMCP_BusinessQuantity
+  measure: EMCP_Measure
+  package: EMCP_Package
+}
+
+type EMCP_Concept {
+  icon: String @deprecated(reason: "Please use ui field instead.")
+  conceptKind: EMCP_ConceptKindType!
+  description: String
+  id: Int!
+  inherit: Boolean!
+  label: String!
+  name: String!
+  packageId: Int!
+  parentConceptId: Int
+  ui: String!
+  urn: String!
+  version: Int!
+  package: EMCP_Package
+  parentConcept: EMCP_Concept
+  algorithmConceptAlgorithmMeasureLinks: [EMCP_AlgorithmMeasureLink]
+  algorithmConceptAlgorithmPropertyLinks: [EMCP_AlgorithmPropertyLink]
+  properties: [EMCP_Property]
+  dstConceptConceptLinks: [EMCP_ConceptLink]
+  equipmentConceptAlgorithmMeasureLinks: [EMCP_AlgorithmMeasureLink]
+  equipmentConceptAlgorithmPropertyLinks: [EMCP_AlgorithmPropertyLink]
+  concepts: [EMCP_Concept]
+  srcConceptConceptLinks: [EMCP_ConceptLink]
+}
+
+type EMCP_ConceptLink {
+  dstConceptId: Int!
+  id: Int!
+  instancePrefix: String
+  linkKind: EMCP_ConceptLinkKindType!
+  packageId: Int!
+  srcConceptId: Int!
+  dstConcept: EMCP_Concept
+  package: EMCP_Package
+  srcConcept: EMCP_Concept
+}
+
+type EMCP_Country {
+  alpha2Code: String!
+  alpha3Code: String!
+  countryCode: String!
+  id: Int!
+  intermediateRegion: String
+  intermediateRegionCode: String
+  name: String!
+  packageId: Int!
+  region: String
+  regionCode: String
+  subRegion: String
+  subRegionCode: String
+  package: EMCP_Package
+  currencyCountryLinks: [EMCP_CurrencyCountryLink]
+  unitCountryLinks: [EMCP_UnitCountryLink]
+}
+
+type EMCP_Currency {
+  alphaCode: String!
+  decimalPlaces: Int
+  id: Int!
+  name: String!
+  numericCode: String!
+  packageId: Int!
+  symbol: String
+  visible: EMCP_VisibleType!
+  package: EMCP_Package
+  currencyCountryLinks: [EMCP_CurrencyCountryLink]
+}
+
+type EMCP_CurrencyCountryLink {
+  countryId: Int!
+  currencyId: Int!
+  packageId: Int!
+  country: EMCP_Country
+  currency: EMCP_Currency
+  package: EMCP_Package
+}
+
+type EMCP_EnumDescription {
+  description: String
+  enumItemId: String
+  enumValueId: Int!
+  enumValueName: String
+  id: Int!
+  packageId: Int!
+  parentEnumNameUrn: String!
+  ui: String!
+  package: EMCP_Package
+  parentEnumName: EMCP_Property
+}
+
+type EMCP_EventConcept {
+  icon: String @deprecated(reason: "Please use ui field instead.")
+  alarmEventConceptCategoryId: Int!
+  alarmEventConceptTypeId: Int!
+  class: Int
+  defaultCause: String
+  defaultEffect: String
+  description: String
+  id: Int!
+  kind: Int
+  label: String!
+  measureUrns: [String]
+  name: String!
+  packageId: Int!
+  propertyUrns: [String]
+  signal: String!
+  ui: String!
+  urn: String!
+  userPriority: Int
+  version: Int
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategory
+  alarmEventConceptType: EMCP_AlarmEventConceptType
+  package: EMCP_Package
+  eventMappings: [EMCP_EventMapping]
+  eventPropertyLinks: [EMCP_EventPropertyLink]
+}
+
+type EMCP_EventMapping {
+  encoding: String!
+  eventConceptId: Int!
+  kind: EMCP_MappingKindType
+  mapper: String
+  mappingState: EMCP_MappingStateType!
+  packageId: Int!
+  properties: String!
+  tagValue: String
+  eventConcept: EMCP_EventConcept
+  package: EMCP_Package
+}
+
+type EMCP_EventPropertyLink {
+  access: EMCP_AccessType
+  defFVal: Float
+  defIVal: Int
+  defSVal: String
+  eventConceptId: Int!
+  mandatory: Boolean
+  ordering: EMCP_OrderingType
+  packageId: Int!
+  propertyId: Int!
+  visible: EMCP_VisibleType
+  eventConcept: EMCP_EventConcept
+  package: EMCP_Package
+  property: EMCP_Property
+}
+
+type EMCP_Hierarchy {
+  level: Int
+  parentId: Int
+  thing: EMCP_Thing!
+}
+
+type EMCP_MValueMapping {
+  id: Int!
+  mapping: String!
+  measureId: Int!
+  name: String!
+  packageId: Int!
+  property1Id: Int
+  property1SVal: String
+  property2Id: Int
+  property2SVal: String
+  property3Id: Int
+  property3SVal: String
+  measure: EMCP_Measure
+  package: EMCP_Package
+  property1: EMCP_Property
+  property2: EMCP_Property
+  property3: EMCP_Property
+}
+
+type EMCP_Measure {
+  accumulation: EMCP_AccumulationType!
+  createDate: DateTime!
+  description: String
+  encoding: EMCP_EncodingType!
+  enumParent: Int
+  id: Int!
+  label: String
+  name: String!
+  packageId: Int!
+  statistical: EMCP_StatisticalType!
+  timeAggregation: EMCP_TimeAggregationType!
+  uiPreferenceId: Int
+  unitId: Int!
+  updateDate: DateTime!
+  urn: String!
+  enumParentProperty: EMCP_Property
+  package: EMCP_Package
+  uiPreference: EMCP_UiPreference
+  unit: EMCP_Unit
+  algorithmMeasureLinks: [EMCP_AlgorithmMeasureLink]
+  measureLinks: [EMCP_MeasureLink]
+  businessQuantityPriorities: [EMCP_BusinessQuantityPriority]
+  measureMappings: [EMCP_MeasureMapping]
+  mValueMappings: [EMCP_MValueMapping]
+}
+
+type EMCP_MeasureLink {
+  conceptId: Int!
+  id: Int!
+  measureId: Int!
+  packageId: Int!
+  tagId: Int
+  tagValue: String
+  concept: EMCP_Concept
+  measure: EMCP_Measure
+  package: EMCP_Package
+  tag: EMCP_Tag
+}
+
+type EMCP_MeasureMapping {
+  encoding: EMCP_EncodingType
+  id: Int!
+  kind: EMCP_MappingKindType
+  mapper: String
+  mappingState: EMCP_MappingStateType!
+  measureId: Int!
+  packageId: Int!
+  properties: String
+  propertyMappings: String
+  tagValue: String
+  measure: EMCP_Measure
+  package: EMCP_Package
+}
+
+type EMCP_NodeLink {
+  createDate: DateTime!
+  dstAlarmConceptId: Int
+  dstEventConceptId: Int
+  dstId: Int!
+  dstMeasureId: Int
+  dstNode: EMCP_NodeKindType!
+  dstPropertyId: Int
+  dstTagId: Int
+  dstTagValue: String
+  id: Int!
+  kind: EMCP_LinkKindType!
+  percentage: Float!
+  srcAlarmConceptId: Int
+  srcEventConceptId: Int
+  srcId: Int!
+  srcMeasureId: Int
+  srcNode: EMCP_NodeKindType!
+  srcPropertyId: Int
+  srcTagId: Int
+  srcTagValue: String
+  srcAlarmConcept: EMCP_AlarmConcept
+  dstAlarmConcept: EMCP_AlarmConcept
+  dstEventConcept: EMCP_EventConcept
+  dst: EMCP_Thing
+  dstMeasure: EMCP_Measure
+  dstProperty: EMCP_Property
+  dstTag: EMCP_Tag
+  srcEventConcept: EMCP_EventConcept
+  srcMeasure: EMCP_Measure
+  src: EMCP_Thing
+  srcProperty: EMCP_Property
+  srcTag: EMCP_Tag
+  nodelinkPValues: [EMCP_NodelinkPValue]
+}
+
+type EMCP_NodelinkPValue {
+  pfval: Float
+  psval: String
+  pival: Int
+  createDate: DateTime!
+  id: Int!
+  nodelinkId: Int!
+  propertyId: Int!
+  pTsVal: DateTime
+  updateDate: DateTime!
+  nodelink: EMCP_NodeLink
+  property: EMCP_Property
+}
+
+type EMCP_PValue {
+  pfval: Float
+  psval: String
+  pival: Int
+  pTsVal: DateTime
+  createDate: DateTime!
+  handle: String
+  id: Int!
+  propertyId: Int!
+  thingId: Int!
+  updateDate: DateTime!
+  property: EMCP_Property
+  thing: EMCP_Thing
+}
+
+type EMCP_Package {
+  author: String
+  description: String
+  id: Int!
+  name: String
+  org: String
+  parentPackageId: Int
+  urn: String!
+  version: String!
+}
+
+type EMCP_Property {
+  propertyType: EMCP_PropertyType! @deprecated(reason: "No longer supported.")
+  accessType: EMCP_AccessType!
+  encodingType: EMCP_EncodingType!
+  facetType: EMCP_FacetType!
+  orderingType: EMCP_OrderingType!
+  conceptId: Int
+  createDate: DateTime!
+  defFVal: Float
+  defIVal: Int
+  defSVal: String
+  description: String
+  enumUrn: String
+  example: String
+  id: Int!
+  label: String!
+  mandatory: Boolean!
+  name: String!
+  packageId: Int!
+  propertyRangeId: Int
+  uiPreferenceId: Int
+  unitId: Int
+  updateDate: DateTime!
+  urn: String!
+  visible: EMCP_VisibleType!
+  concept: EMCP_Concept
+  package: EMCP_Package
+  propertyRange: EMCP_PropertyRange
+  uiPreference: EMCP_UiPreference
+  unit: EMCP_Unit
+  measures: [EMCP_Measure]
+  algorithmPropertyLinks: [EMCP_AlgorithmPropertyLink]
+  enumDescriptions: [EMCP_EnumDescription]
+  alarmPropertyLinks: [EMCP_AlarmPropertyLink]
+  eventPropertyLinks: [EMCP_EventPropertyLink]
+  propertyLinks: [EMCP_PropertyLink]
+  propertyMappings: [EMCP_PropertyMapping]
+  topoNodes: [EMCP_TopoNode]
+}
+
+type EMCP_PropertyLink {
+  access: EMCP_AccessType
+  conceptId: Int!
+  defFVal: Float
+  defIVal: Int
+  defSVal: String
+  mandatory: Boolean
+  ordering: EMCP_OrderingType
+  packageId: Int!
+  propertyId: Int!
+  uiPreferenceId: Int
+  visible: EMCP_VisibleType
+  concept: EMCP_Concept
+  package: EMCP_Package
+  property: EMCP_Property
+  uiPreference: EMCP_UiPreference
+}
+
+type EMCP_PropertyMapping {
+  id: Int!
+  kind: EMCP_MappingKindType!
+  mapper: String
+  mapperDescription: String
+  packageId: Int!
+  propertyId: Int!
+  urn: String!
+  package: EMCP_Package
+  property: EMCP_Property
+}
+
+type EMCP_PropertyRange {
+  decimalDigits: Int
+  description: String
+  encoding: EMCP_EncodingType
+  id: Int!
+  jsonSchema: String
+  label: String!
+  maxTs: DateTime
+  maxValue: Float
+  minTs: DateTime
+  minValue: Float
+  packageId: Int!
+  regExp: String
+  urn: String!
+  wholeDigits: Int
+  package: EMCP_Package
+  properties: [EMCP_Property]
+}
+
+type EMCP_Slot {
+  createDate: DateTime!
+  handle: String
+  measureId: Int!
+  properties: String
+  tagId: Int
+  tagValue: String
+  thingId: Int!
+  uuid: Uuid!
+  measure: EMCP_Measure
+  tag: EMCP_Tag
+  thing: EMCP_Thing
+}
+
+type EMCP_SlotCollectionSegment {
+  items: [EMCP_Slot]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_TableGadget {
+  description: String
+  id: Int!
+  name: String!
+  packageId: Int!
+  package: EMCP_Package
+  tableGadgetItems: [EMCP_TableGadgetItem]
+  tableGadgetMappings: [EMCP_TableGadgetMapping]
+}
+
+type EMCP_TableGadgetItem {
+  mustHaveData: Boolean! @deprecated(reason: "No longer supported.")
+  mustHaveSlot: Boolean! @deprecated(reason: "No longer supported.")
+  businessQuantityIsLogged: Boolean!
+  businessQuantityId: Int!
+  historicalQuery: Boolean!
+  key: String!
+  label: String!
+  packageId: Int!
+  position: Int!
+  tableGadgetId: Int!
+  businessQuantity: EMCP_BusinessQuantity
+  package: EMCP_Package
+  tableGadget: EMCP_TableGadget
+}
+
+type EMCP_TableGadgetMapping {
+  conceptId: Int!
+  id: Int!
+  kind: String!
+  name: String!
+  packageId: Int!
+  property1FVal: Float
+  property1Id: Int
+  property1IVal: Int
+  property1SVal: String
+  property2FVal: Float
+  property2Id: Int
+  property2IVal: Int
+  property2SVal: String
+  property3FVal: Float
+  property3Id: Int
+  property3IVal: Int
+  property3SVal: String
+  tableGadgetId: Int!
+  concept: EMCP_Concept
+  package: EMCP_Package
+  property1: EMCP_Property
+  property2: EMCP_Property
+  property3: EMCP_Property
+  tableGadget: EMCP_TableGadget
+}
+
+type EMCP_Tag {
+  description: String
+  id: Int!
+  label: String
+  name: String!
+  packageId: Int!
+  urn: String!
+  version: Int
+  package: EMCP_Package
+}
+
+type EMCP_Thing {
+  pvalues(where: EMCP_PValueFilterInput): [EMCP_PValue]
+  nodeLinkSrcs(where: EMCP_NodeLinkFilterInput): [EMCP_NodeLink]
+  nodeLinkDsts(where: EMCP_NodeLinkFilterInput): [EMCP_NodeLink]
+  label: String!
+  name: String @deprecated(reason: "Please use label field instead.")
+  conceptId: Int!
+  createDate: DateTime!
+  handle: String
+  id: Int!
+  tenantId: Int
+  updateDate: DateTime!
+  version: Int
+  concept: EMCP_Concept
+  tenant: EMCP_Thing
+  slots: [EMCP_Slot]
+}
+
+type EMCP_ThingCollectionSegment {
+  items: [EMCP_Thing]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_TopoNode {
+  id: Int!
+  label: String
+  level: Int
+  packageId: Int!
+  propertyId: Int!
+  topoId: Int!
+  package: EMCP_Package
+  property: EMCP_Property
+  topo: EMCP_Topology
+}
+
+type EMCP_TopoNodeContext {
+  label: String
+  name: String @deprecated(reason: "No longer supported.")
+  id: Int!
+  type: EMCP_FilterType!
+  urn: String!
+  value: String
+}
+
+type EMCP_Topology {
+  description: String
+  id: Int!
+  label: String
+  name: String!
+  packageId: Int!
+  rootConceptId: Int!
+  topoClause: String
+  urn: String!
+  version: Int
+  package: EMCP_Package
+  rootConcept: EMCP_Concept
+  topoNodes: [EMCP_TopoNode]
+}
+
+type EMCP_UiPreference {
+  description: String
+  id: Int!
+  label: String
+  packageId: Int!
+  preference: String!
+  urn: String!
+  package: EMCP_Package
+  measures: [EMCP_Measure]
+  properties: [EMCP_Property]
+  propertyLinks: [EMCP_PropertyLink]
+}
+
+type EMCP_Unit {
+  description: String
+  id: Int!
+  isSi: Boolean
+  name: String!
+  packageId: Int!
+  quantityName: EMCP_QuantityNameType
+  symbol: String!
+  urn: String!
+  package: EMCP_Package
+  unitCountryLinks: [EMCP_UnitCountryLink]
+  measures: [EMCP_Measure]
+  properties: [EMCP_Property]
+}
+
+type EMCP_UnitCountryLink {
+  countryId: Int!
+  packageId: Int!
+  preferredUnitId: Int!
+  country: EMCP_Country
+  package: EMCP_Package
+  preferredUnit: EMCP_Unit
+}
+
+input ComparableEMCP_DoubleOperationFilterInput {
+  eq: Float
+  neq: Float
+  in: [Float!]
+  nin: [Float!]
+  gt: Float
+  ngt: Float
+  gte: Float
+  ngte: Float
+  lt: Float
+  nlt: Float
+  lte: Float
+  nlte: Float
+}
+
+input ComparableEMCP_GuidOperationFilterInput {
+  eq: Uuid
+  neq: Uuid
+  in: [Uuid!]
+  nin: [Uuid!]
+  gt: Uuid
+  ngt: Uuid
+  gte: Uuid
+  ngte: Uuid
+  lt: Uuid
+  nlt: Uuid
+  lte: Uuid
+  nlte: Uuid
+}
+
+input EMCP_HierarchyFilterInput {
+  and: [EMCP_HierarchyFilterInput!]
+  or: [EMCP_HierarchyFilterInput!]
+  thing: EMCP_ThingFilterInput
+}
+
+input EMCP_LinkKindTypeOperationFilterInput {
+  eq: EMCP_LinkKindType
+  neq: EMCP_LinkKindType
+  in: [EMCP_LinkKindType!]
+  nin: [EMCP_LinkKindType!]
+}
+
+input EMCP_MeasureSortInput {
+  accumulation: SortEnumType
+  createDate: SortEnumType
+  description: SortEnumType
+  encoding: SortEnumType
+  enumParent: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  statistical: SortEnumType
+  timeAggregation: SortEnumType
+  uiPreferenceId: SortEnumType
+  unitId: SortEnumType
+  updateDate: SortEnumType
+  urn: SortEnumType
+  enumParentProperty: EMCP_PropertySortInput
+  package: EMCP_PackageSortInput
+  uiPreference: EMCP_UiPreferenceSortInput
+  unit: EMCP_UnitSortInput
+}
+
+input EMCP_NodeKindTypeOperationFilterInput {
+  eq: EMCP_NodeKindType
+  neq: EMCP_NodeKindType
+  in: [EMCP_NodeKindType!]
+  nin: [EMCP_NodeKindType!]
+}
+
+input EMCP_NodeLinkFilterInput {
+  and: [EMCP_NodeLinkFilterInput!]
+  or: [EMCP_NodeLinkFilterInput!]
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  dstAlarmConceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  dstEventConceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  dstId: ComparableEMCP_Int32OperationFilterInput
+  dstMeasureId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  dstNode: EMCP_NodeKindTypeOperationFilterInput
+  dstPropertyId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  dstTagId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  dstTagValue: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  kind: EMCP_LinkKindTypeOperationFilterInput
+  percentage: ComparableEMCP_DoubleOperationFilterInput
+  srcAlarmConceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  srcEventConceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  srcId: ComparableEMCP_Int32OperationFilterInput
+  srcMeasureId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  srcNode: EMCP_NodeKindTypeOperationFilterInput
+  srcPropertyId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  srcTagId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  srcTagValue: EMCP_StringOperationFilterInput
+  srcAlarmConcept: EMCP_AlarmConceptFilterInput
+  dstAlarmConcept: EMCP_AlarmConceptFilterInput
+  dstEventConcept: EMCP_EventConceptFilterInput
+  dst: EMCP_ThingFilterInput
+  dstMeasure: EMCP_MeasureFilterInput
+  dstProperty: EMCP_PropertyFilterInput
+  dstTag: EMCP_TagFilterInput
+  srcEventConcept: EMCP_EventConceptFilterInput
+  srcMeasure: EMCP_MeasureFilterInput
+  src: EMCP_ThingFilterInput
+  srcProperty: EMCP_PropertyFilterInput
+  srcTag: EMCP_TagFilterInput
+  nodelinkPValues: ListEMCP_FilterInputTypeOfNodelinkPValueFilterInput
+}
+
+input EMCP_NodeLinkMutationInput {
+  id: Int
+  sourceThingId: Int
+  sourceThingHandle: String
+  sourceKindType: EMCP_NodeKindType
+  destThingId: Int
+  destThingHandle: String
+  destKindType: EMCP_NodeKindType
+  linkKindType: EMCP_LinkKindType
+  percentage: Float
+  srcMeasureId: Int
+  dstMeasureId: Int
+  srcTagId: Int
+  dstTagId: Int
+  srcTagValue: String
+  dstTagValue: String
+  srcPropertyId: Int
+  dstPropertyId: Int
+  srcEventConceptId: Int
+  dstEventConceptId: Int
+  srcAlarmConceptId: Int
+  dstAlarmConceptId: Int
+  pvUrns: [EMCP_PvUrnInput!]
+}
+
+input EMCP_NodelinkPValueFilterInput {
+  and: [EMCP_NodelinkPValueFilterInput!]
+  or: [EMCP_NodelinkPValueFilterInput!]
+  pfval: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  psval: EMCP_StringOperationFilterInput
+  pival: ComparableEMCP_NullableOfInt32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  nodelinkId: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  pTsVal: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  nodelink: EMCP_NodeLinkFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_PValueFilterInput {
+  and: [EMCP_PValueFilterInput!]
+  or: [EMCP_PValueFilterInput!]
+  pfval: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  psval: EMCP_StringOperationFilterInput
+  pival: ComparableEMCP_NullableOfInt32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  pTsVal: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  property: EMCP_PropertyFilterInput
+  thing: EMCP_ThingFilterInput
+}
+
+input EMCP_PropertyRangeSortInput {
+  decimalDigits: SortEnumType
+  description: SortEnumType
+  encoding: SortEnumType
+  id: SortEnumType
+  jsonSchema: SortEnumType
+  label: SortEnumType
+  maxTs: SortEnumType
+  maxValue: SortEnumType
+  minTs: SortEnumType
+  minValue: SortEnumType
+  packageId: SortEnumType
+  regExp: SortEnumType
+  urn: SortEnumType
+  wholeDigits: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_PropertySortInput {
+  access: SortEnumType
+  conceptId: SortEnumType
+  createDate: SortEnumType
+  defFVal: SortEnumType
+  defIVal: SortEnumType
+  defSVal: SortEnumType
+  description: SortEnumType
+  encoding: SortEnumType
+  enumUrn: SortEnumType
+  example: SortEnumType
+  facet: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  mandatory: SortEnumType
+  name: SortEnumType
+  ordering: SortEnumType
+  packageId: SortEnumType
+  propertyRangeId: SortEnumType
+  uiPreferenceId: SortEnumType
+  unitId: SortEnumType
+  updateDate: SortEnumType
+  urn: SortEnumType
+  visible: SortEnumType
+  concept: EMCP_ConceptSortInput
+  package: EMCP_PackageSortInput
+  propertyRange: EMCP_PropertyRangeSortInput
+  uiPreference: EMCP_UiPreferenceSortInput
+  unit: EMCP_UnitSortInput
+}
+
+input EMCP_PvUrnInput {
+  urn: String!
+  fval: Float
+  ival: Int
+  sval: String
+  tsVal: DateTime
+}
+
+input EMCP_SlotFilterInput {
+  and: [EMCP_SlotFilterInput!]
+  or: [EMCP_SlotFilterInput!]
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  measureId: ComparableEMCP_Int32OperationFilterInput
+  properties: EMCP_StringOperationFilterInput
+  tagId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  tagValue: EMCP_StringOperationFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  uuid: ComparableEMCP_GuidOperationFilterInput
+  measure: EMCP_MeasureFilterInput
+  tag: EMCP_TagFilterInput
+  thing: EMCP_ThingFilterInput
+}
+
+input EMCP_SlotMutationInput {
+  id: Uuid
+  thingId: Int
+  measureId: Int
+  handle: String
+  tagId: Int
+  tagValue: String
+  properties: String
+}
+
+input EMCP_SlotSortInput {
+  createDate: SortEnumType
+  handle: SortEnumType
+  measureId: SortEnumType
+  properties: SortEnumType
+  tagId: SortEnumType
+  tagValue: SortEnumType
+  thingId: SortEnumType
+  uuid: SortEnumType
+  measure: EMCP_MeasureSortInput
+  tag: EMCP_TagSortInput
+  thing: EMCP_ThingSortInput
+}
+
+input EMCP_TagSortInput {
+  description: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  urn: SortEnumType
+  version: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_ThingFilterInput {
+  and: [EMCP_ThingFilterInput!]
+  or: [EMCP_ThingFilterInput!]
+  pvalues: ListEMCP_FilterInputTypeOfPValueFilterInput
+  nodeLinkSrcs: ListEMCP_FilterInputTypeOfNodeLinkFilterInput
+  nodeLinkDsts: ListEMCP_FilterInputTypeOfNodeLinkFilterInput
+  conceptId: ComparableEMCP_Int32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  tenantId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  version: ComparableEMCP_NullableOfInt32OperationFilterInput
+  concept: EMCP_ConceptFilterInput
+  tenant: EMCP_ThingFilterInput
+}
+
+input EMCP_ThingMutationInput {
+  pvUrns: [EMCP_PvUrnInput!]
+  thingId: Int
+  handle: String
+  label: String
+  conceptUrn: String
+  name: String
+  newParentId: Int
+  nodeLinks: [EMCP_NodeLinkMutationInput!]
+  nodeLinkUpdateBehavior: EMCP_NodeLinkUpdateBehavior
+}
+
+input EMCP_ThingSortInput {
+  conceptId: SortEnumType
+  createDate: SortEnumType
+  handle: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  tenantId: SortEnumType
+  updateDate: SortEnumType
+  version: SortEnumType
+  concept: EMCP_ConceptSortInput
+  tenant: EMCP_ThingSortInput
+}
+
+input EMCP_UiPreferenceSortInput {
+  description: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  packageId: SortEnumType
+  preference: SortEnumType
+  urn: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_UnitSortInput {
+  description: SortEnumType
+  id: SortEnumType
+  isSi: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  quantityName: SortEnumType
+  symbol: SortEnumType
+  urn: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input ListEMCP_FilterInputTypeOfNodeLinkFilterInput {
+  all: EMCP_NodeLinkFilterInput
+  none: EMCP_NodeLinkFilterInput
+  some: EMCP_NodeLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfNodelinkPValueFilterInput {
+  all: EMCP_NodelinkPValueFilterInput
+  none: EMCP_NodelinkPValueFilterInput
+  some: EMCP_NodelinkPValueFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfPValueFilterInput {
+  all: EMCP_PValueFilterInput
+  none: EMCP_PValueFilterInput
+  some: EMCP_PValueFilterInput
+  any: Boolean
+}
+
+enum EMCP_AssetType {
+  ASSET
+  B_PAS
+  SITE_SERVER
+  SE8000
+}
+
+enum EMCP_BasicNodeType {
+  UNKNOWN
+  DEVICE
+  GATEWAY
+  PANEL
+}
+
+enum EMCP_HierarchyMode {
+  NONE
+  ENERGY
+  PHYSICAL
+  COMMUNICATION
+  BILLING
+  EQUIPMENT
+}
+
+enum EMCP_LinkKindType {
+  CONTAINS
+  MAIN
+  FEED
+  INCOMER
+  ROOT
+  MEASURE
+  PERFORMS
+  RESIDUAL_FEED
+  OCCUPIES
+  MONITOR_LOAD
+  FORWARD
+  EXTENDS
+  CONTEXT
+  GROUPS
+}
+
+enum EMCP_NodeKindType {
+  UPSTREAM_NODE
+  UPSTREAM_NODE_PHASE_A
+  UPSTREAM_NODE_PHASE_B
+  UPSTREAM_NODE_PHASE_C
+  UPSTREAM_NODE_NEUTRAL
+  DOWNSTREAM_NODE_NEUTRAL
+  MEASUREMENT_NODE_NEUTRAL
+  DOWNSTREAM_NODE
+  DOWNSTREAM_NODE_PHASE_A
+  DOWNSTREAM_NODE_PHASE_B
+  DOWNSTREAM_PHASE_C
+  MEASUREMENT_NODE
+  MEASUREMENT_NODE_PHASE_A
+  MEASUREMENT_NODE_PHASE_B
+  MEASUREMENT_NODE_PHASE_C
+  ROOT_NODE
+}
+
+enum EMCP_NodeLinkUpdateBehavior {
+  NOTHING
+  REMOVE_PANELBOARD_CONTEXTUALIZATION
+}
+
+enum EMCP_PropertyType {
+  VALUE
+  ID
+}
+
+type EMCP_AlarmInstance {
+  alarmOccurrences(
+    limit: Int
+    where: EMCP_AlarmOccurrenceFilterInput
+    order: [EMCP_AlarmOccurrenceSortInput!]
+  ): [EMCP_AlarmOccurrence]
+  onditmms: Int!
+  alarmPriority: EMCP_AlarmPriorityType!
+    @deprecated(reason: "No longer supported.")
+  alarmConceptId: Int!
+  alarmControl: EMCP_AlarmControlValueType!
+  alarmFamily: EMCP_AlarmFamilyType
+  alarmModel: EMCP_AlarmModelType!
+  alarmState: EMCP_AlarmStateType!
+  handle: String
+  id: Int!
+  lastUpdated: DateTime!
+  thingId: Int!
+  tsMath: EMCP_TsMathType!
+  alarmConcept: EMCP_AlarmConcept
+  thing: EMCP_Thing
+  alarmStateTransitions: [EMCP_AlarmStateTransition]
+}
+
+type EMCP_AlarmOccurrence {
+  alarmInstance(where: EMCP_AlarmInstanceFilterInput): EMCP_AlarmInstance
+  measures: Any
+  alarmPriority: EMCP_AlarmPriorityType!
+  acknowledgementAlarmStateTransitionId: Int
+  alarmInstanceId: Int!
+  alarmState: EMCP_AlarmStateType!
+  endTime: DateTime
+  handle: String!
+  id: Int!
+  lastUpdated: DateTime!
+  possibleCause: String
+  possibleProblem: String
+  possibleRecommendation: String
+  possibleRisk: String
+  startTime: DateTime!
+  acknowledgementAlarmStateTransition: EMCP_AlarmStateTransition
+  alarmOccurrencePValues: [EMCP_AlarmOccurrencePValue]
+  eventAlarms: [EMCP_EventAlarm]
+}
+
+type EMCP_AlarmOccurrencePValue {
+  pfval: Float
+  psval: String
+  pival: Int
+  alarmOccurrenceId: Int!
+  createDate: DateTime!
+  handle: String
+  id: Int!
+  propertyId: Int!
+  pTsVal: DateTime
+  updateDate: DateTime!
+  alarmOccurrence: EMCP_AlarmOccurrence
+  property: EMCP_Property
+}
+
+type EMCP_AlarmStateTransition {
+  subjectId: Int
+  idmsFederatedId: String!
+    @deprecated(reason: "Please use subjectId field instead.")
+  alarmInstanceId: Int!
+  alarmState: EMCP_AlarmStateType!
+  comment: String
+  id: Int!
+  transitionTime: DateTime!
+  alarmInstance: EMCP_AlarmInstance
+}
+
+type EMCP_Event {
+  eventConceptId: Int!
+  eventFamily: EMCP_EventFamilyType
+  eventType: EMCP_EventType!
+  handle: String!
+  id: Int!
+  measures: String
+  message: String
+  thingId: Int!
+  ts: DateTime!
+  eventConcept: EMCP_EventConcept
+  thing: EMCP_Thing
+  eventAlarms: [EMCP_EventAlarm]
+  eventPValues: [EMCP_EventPValue]
+}
+
+type EMCP_EventAlarm {
+  alarmOccurrenceId: Int!
+  eventId: Int!
+  alarmOccurrence: EMCP_AlarmOccurrence
+  event: EMCP_Event
+}
+
+type EMCP_EventCollectionSegment {
+  items: [EMCP_Event]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_EventConceptThing {
+  eventConceptId: Int!
+  handle: String!
+  id: Int!
+  thingId: Int!
+  eventConcept: EMCP_EventConcept
+  thing: EMCP_Thing
+}
+
+type EMCP_EventConceptThingCollectionSegment {
+  items: [EMCP_EventConceptThing]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_EventPValue {
+  createDate: DateTime!
+  eventId: Int!
+  handle: String
+  id: Int!
+  pFVal: Float
+  pIVal: Int
+  propertyId: Int!
+  pSVal: String
+  pTsVal: DateTime
+  updateDate: DateTime!
+  event: EMCP_Event
+  property: EMCP_Property
+}
+
+input EMCP_AlarmConceptSortInput {
+  alarmEventConceptCategoryId: SortEnumType
+  alarmEventConceptTypeId: SortEnumType
+  description: SortEnumType
+  icon: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  ui: SortEnumType
+  urn: SortEnumType
+  version: SortEnumType
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategorySortInput
+  alarmEventConceptType: EMCP_AlarmEventConceptTypeSortInput
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_AlarmControlValueTypeOperationFilterInput {
+  eq: EMCP_AlarmControlValueType
+  neq: EMCP_AlarmControlValueType
+  in: [EMCP_AlarmControlValueType!]
+  nin: [EMCP_AlarmControlValueType!]
+}
+
+input EMCP_AlarmEventConceptCategorySortInput {
+  description: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_AlarmEventConceptTypeSortInput {
+  description: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_AlarmInstanceFilterInput {
+  and: [EMCP_AlarmInstanceFilterInput!]
+  or: [EMCP_AlarmInstanceFilterInput!]
+  onditmms: ComparableEMCP_Int32OperationFilterInput
+  alarmPriority: EMCP_AlarmPriorityTypeOperationFilterInput
+  alarmConceptId: ComparableEMCP_Int32OperationFilterInput
+  alarmControl: EMCP_AlarmControlValueTypeOperationFilterInput
+  alarmFamily: EMCP_NullableOfAlarmFamilyTypeOperationFilterInput
+  alarmModel: EMCP_AlarmModelTypeOperationFilterInput
+  alarmState: EMCP_AlarmStateTypeOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  lastUpdated: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  tsMath: EMCP_TsMathTypeOperationFilterInput
+  alarmConcept: EMCP_AlarmConceptFilterInput
+  thing: EMCP_ThingFilterInput
+  alarmOccurrences: ListEMCP_FilterInputTypeOfAlarmOccurrenceFilterInput
+  alarmStateTransitions: ListEMCP_FilterInputTypeOfAlarmStateTransitionFilterInput
+}
+
+input EMCP_AlarmInstanceSortInput {
+  alarmConceptId: SortEnumType
+  alarmControl: SortEnumType
+  alarmFamily: SortEnumType
+  alarmModel: SortEnumType
+  alarmPriority: SortEnumType
+  alarmState: SortEnumType
+  handle: SortEnumType
+  id: SortEnumType
+  lastUpdated: SortEnumType
+  onDitMms: SortEnumType
+  thingId: SortEnumType
+  tsMath: SortEnumType
+  alarmConcept: EMCP_AlarmConceptSortInput
+  thing: EMCP_ThingSortInput
+}
+
+input EMCP_AlarmModelTypeOperationFilterInput {
+  eq: EMCP_AlarmModelType
+  neq: EMCP_AlarmModelType
+  in: [EMCP_AlarmModelType!]
+  nin: [EMCP_AlarmModelType!]
+}
+
+input EMCP_AlarmOccurrenceFilterInput {
+  and: [EMCP_AlarmOccurrenceFilterInput!]
+  or: [EMCP_AlarmOccurrenceFilterInput!]
+  measures: Any
+  alarmPriority: EMCP_AlarmPriorityTypeOperationFilterInput
+  acknowledgementAlarmStateTransitionId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  alarmInstanceId: ComparableEMCP_Int32OperationFilterInput
+  alarmState: EMCP_AlarmStateTypeOperationFilterInput
+  endTime: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  lastUpdated: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  possibleCause: EMCP_StringOperationFilterInput
+  possibleProblem: EMCP_StringOperationFilterInput
+  possibleRecommendation: EMCP_StringOperationFilterInput
+  possibleRisk: EMCP_StringOperationFilterInput
+  startTime: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  acknowledgementAlarmStateTransition: EMCP_AlarmStateTransitionFilterInput
+  alarmInstance: EMCP_AlarmInstanceFilterInput
+  alarmOccurrencePValues: ListEMCP_FilterInputTypeOfAlarmOccurrencePValueFilterInput
+  eventAlarms: ListEMCP_FilterInputTypeOfEventAlarmFilterInput
+}
+
+input EMCP_AlarmOccurrencePValueFilterInput {
+  and: [EMCP_AlarmOccurrencePValueFilterInput!]
+  or: [EMCP_AlarmOccurrencePValueFilterInput!]
+  pfval: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  psval: EMCP_StringOperationFilterInput
+  pival: ComparableEMCP_NullableOfInt32OperationFilterInput
+  alarmOccurrenceId: ComparableEMCP_Int32OperationFilterInput
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  pTsVal: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  alarmOccurrence: EMCP_AlarmOccurrenceFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_AlarmOccurrenceSortInput {
+  acknowledgementAlarmStateTransitionId: SortEnumType
+  alarmInstanceId: SortEnumType
+  alarmPriority: SortEnumType
+  alarmState: SortEnumType
+  endTime: SortEnumType
+  handle: SortEnumType
+  id: SortEnumType
+  lastUpdated: SortEnumType
+  measures: SortEnumType
+  possibleCause: SortEnumType
+  possibleProblem: SortEnumType
+  possibleRecommendation: SortEnumType
+  possibleRisk: SortEnumType
+  startTime: SortEnumType
+  acknowledgementAlarmStateTransition: EMCP_AlarmStateTransitionSortInput
+  alarmInstance: EMCP_AlarmInstanceSortInput
+}
+
+input EMCP_AlarmPriorityTypeOperationFilterInput {
+  eq: EMCP_AlarmPriorityType
+  neq: EMCP_AlarmPriorityType
+  in: [EMCP_AlarmPriorityType!]
+  nin: [EMCP_AlarmPriorityType!]
+}
+
+input EMCP_AlarmStateTransitionFilterInput {
+  and: [EMCP_AlarmStateTransitionFilterInput!]
+  or: [EMCP_AlarmStateTransitionFilterInput!]
+  alarmInstanceId: ComparableEMCP_Int32OperationFilterInput
+  alarmState: EMCP_AlarmStateTypeOperationFilterInput
+  comment: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  subjectId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  transitionTime: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  alarmInstance: EMCP_AlarmInstanceFilterInput
+}
+
+input EMCP_AlarmStateTransitionSortInput {
+  alarmInstanceId: SortEnumType
+  alarmState: SortEnumType
+  comment: SortEnumType
+  id: SortEnumType
+  subjectId: SortEnumType
+  transitionTime: SortEnumType
+  alarmInstance: EMCP_AlarmInstanceSortInput
+}
+
+input EMCP_AlarmStateTypeOperationFilterInput {
+  eq: EMCP_AlarmStateType
+  neq: EMCP_AlarmStateType
+  in: [EMCP_AlarmStateType!]
+  nin: [EMCP_AlarmStateType!]
+}
+
+input EMCP_EventAlarmFilterInput {
+  and: [EMCP_EventAlarmFilterInput!]
+  or: [EMCP_EventAlarmFilterInput!]
+  alarmOccurrenceId: ComparableEMCP_Int32OperationFilterInput
+  eventId: ComparableEMCP_Int32OperationFilterInput
+  alarmOccurrence: EMCP_AlarmOccurrenceFilterInput
+  event: EMCP_EventFilterInput
+}
+
+input EMCP_EventConceptSortInput {
+  alarmEventConceptCategoryId: SortEnumType
+  alarmEventConceptTypeId: SortEnumType
+  class: SortEnumType
+  defaultCause: SortEnumType
+  defaultEffect: SortEnumType
+  description: SortEnumType
+  icon: SortEnumType
+  id: SortEnumType
+  kind: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  signal: SortEnumType
+  ui: SortEnumType
+  urn: SortEnumType
+  userPriority: SortEnumType
+  version: SortEnumType
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategorySortInput
+  alarmEventConceptType: EMCP_AlarmEventConceptTypeSortInput
+  package: EMCP_PackageSortInput
+}
+
+input EMCP_EventConceptThingFilterInput {
+  and: [EMCP_EventConceptThingFilterInput!]
+  or: [EMCP_EventConceptThingFilterInput!]
+  eventConceptId: ComparableEMCP_Int32OperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  eventConcept: EMCP_EventConceptFilterInput
+  thing: EMCP_ThingFilterInput
+}
+
+input EMCP_EventConceptThingInput {
+  id: Int
+  handle: String
+  thingId: Int
+  eventConceptId: Int
+}
+
+input EMCP_EventConceptThingSortInput {
+  eventConceptId: SortEnumType
+  handle: SortEnumType
+  id: SortEnumType
+  thingId: SortEnumType
+  eventConcept: EMCP_EventConceptSortInput
+  thing: EMCP_ThingSortInput
+}
+
+input EMCP_EventFilterInput {
+  and: [EMCP_EventFilterInput!]
+  or: [EMCP_EventFilterInput!]
+  eventConceptId: ComparableEMCP_Int32OperationFilterInput
+  eventFamily: EMCP_NullableOfEventFamilyTypeOperationFilterInput
+  eventType: EMCP_EventTypeOperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  measures: EMCP_StringOperationFilterInput
+  message: EMCP_StringOperationFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  ts: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  eventConcept: EMCP_EventConceptFilterInput
+  thing: EMCP_ThingFilterInput
+  eventAlarms: ListEMCP_FilterInputTypeOfEventAlarmFilterInput
+  eventPValues: ListEMCP_FilterInputTypeOfEventPValueFilterInput
+}
+
+input EMCP_EventMutationInput {
+  eventConceptId: Int
+  eventConceptUrn: String
+  eventFamily: EMCP_EventFamilyType
+  eventType: EMCP_EventType
+  handle: String
+  id: Int
+  measures: String
+  message: String
+  thingId: Int
+  ts: DateTime
+  pvUrns: [EMCP_PvUrnInput!]
+  alarmOccurrenceId: Int
+}
+
+input EMCP_EventPValueFilterInput {
+  and: [EMCP_EventPValueFilterInput!]
+  or: [EMCP_EventPValueFilterInput!]
+  createDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  eventId: ComparableEMCP_Int32OperationFilterInput
+  handle: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  pFVal: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  pIVal: ComparableEMCP_NullableOfInt32OperationFilterInput
+  propertyId: ComparableEMCP_Int32OperationFilterInput
+  pSVal: EMCP_StringOperationFilterInput
+  pTsVal: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  updateDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  event: EMCP_EventFilterInput
+  property: EMCP_PropertyFilterInput
+}
+
+input EMCP_EventSortInput {
+  eventConceptId: SortEnumType
+  eventFamily: SortEnumType
+  eventType: SortEnumType
+  handle: SortEnumType
+  id: SortEnumType
+  measures: SortEnumType
+  message: SortEnumType
+  thingId: SortEnumType
+  ts: SortEnumType
+  eventConcept: EMCP_EventConceptSortInput
+  thing: EMCP_ThingSortInput
+}
+
+input EMCP_EventTypeOperationFilterInput {
+  eq: EMCP_EventType
+  neq: EMCP_EventType
+  in: [EMCP_EventType!]
+  nin: [EMCP_EventType!]
+}
+
+input EMCP_NullableOfAlarmFamilyTypeOperationFilterInput {
+  eq: EMCP_AlarmFamilyType
+  neq: EMCP_AlarmFamilyType
+  in: [EMCP_AlarmFamilyType]
+  nin: [EMCP_AlarmFamilyType]
+}
+
+input EMCP_NullableOfEventFamilyTypeOperationFilterInput {
+  eq: EMCP_EventFamilyType
+  neq: EMCP_EventFamilyType
+  in: [EMCP_EventFamilyType]
+  nin: [EMCP_EventFamilyType]
+}
+
+input EMCP_TsMathTypeOperationFilterInput {
+  eq: EMCP_TsMathType
+  neq: EMCP_TsMathType
+  in: [EMCP_TsMathType!]
+  nin: [EMCP_TsMathType!]
+}
+
+input ListEMCP_FilterInputTypeOfAlarmOccurrenceFilterInput {
+  all: EMCP_AlarmOccurrenceFilterInput
+  none: EMCP_AlarmOccurrenceFilterInput
+  some: EMCP_AlarmOccurrenceFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlarmOccurrencePValueFilterInput {
+  all: EMCP_AlarmOccurrencePValueFilterInput
+  none: EMCP_AlarmOccurrencePValueFilterInput
+  some: EMCP_AlarmOccurrencePValueFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfAlarmStateTransitionFilterInput {
+  all: EMCP_AlarmStateTransitionFilterInput
+  none: EMCP_AlarmStateTransitionFilterInput
+  some: EMCP_AlarmStateTransitionFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfEventAlarmFilterInput {
+  all: EMCP_EventAlarmFilterInput
+  none: EMCP_EventAlarmFilterInput
+  some: EMCP_EventAlarmFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfEventPValueFilterInput {
+  all: EMCP_EventPValueFilterInput
+  none: EMCP_EventPValueFilterInput
+  some: EMCP_EventPValueFilterInput
+  any: Boolean
+}
+
+enum EMCP_AlarmControlValueType {
+  ACK
+  RST
+  SHLV
+  UNSHLV
+  OOS
+  ISV
+  SUP
+  UNSUP
+  CONF
+  NA
+}
+
+enum EMCP_AlarmFamilyType {
+  ELECTRICAL
+  HVAC
+}
+
+enum EMCP_AlarmModelType {
+  EVENT_ONLY
+  ALM_WITH_ACK
+  ALM_WITH_LATCH
+  ALM_WITH_ACK_LATCH
+  ALM_WITH_ACK_CONF_LATCH
+}
+
+enum EMCP_AlarmPriorityType {
+  GREEN @deprecated(reason: "Use Low priority instead")
+  YELLOW @deprecated(reason: "Use Medium priority instead")
+  RED @deprecated(reason: "Use High priority instead")
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum EMCP_AlarmStateType {
+  NORM
+  UNACK
+  ACKED
+  CONFED
+  RTNUN
+  LUNACK
+  LACKED
+  LACKEDU
+  SHLVD
+  DSUPR
+  OOSRV
+}
+
+enum EMCP_EventFamilyType {
+  ELECTRICAL
+  HVAC
+}
+
+enum EMCP_EventType {
+  TOPO
+  PICKUP
+  DROPOUT
+  UNARY
+}
+
+enum EMCP_TsMathType {
+  CALCULATION_BASED
+  INPUT_BASED
+}
+
+type EMCP_Subject {
+  subjectPropertyValues(
+    where: EMCP_SubjectPropertyValueFilterInput
+  ): [EMCP_SubjectPropertyValue]
+  id: Int!
+  conceptId: Int!
+  createDate: DateTime!
+  updateDate: DateTime!
+  concept: EMCP_Concept
+  assignments: EMCP_AccessAssignmentCollectionSegment
+}
+
+type EMCP_SubjectCollectionSegment {
+  items: [EMCP_Subject!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_SubjectPropertyValue {
+  propertyId: Int!
+  id: Int!
+  subjectId: Int!
+  createDate: DateTime!
+  updateDate: DateTime!
+  pfval: Float
+  psval: String
+  pival: Int
+  property: EMCP_Property
+  subject: EMCP_Subject
+}
+
+input EMCP_SubjectMutationInput {
+  pvUrns: [EMCP_PvUrnInput!]
+  subjectId: Int
+  conceptUrn: String
+}
+
+enum EMCP_SubjectKind {
+  USER
+  SERVICE
+  GROUP
+}
+
+type EMCP_Module {
+  description: String
+  iconUrl: String
+  id: Int!
+  imageUrl: String
+  label: String!
+  name: String!
+  visible: Boolean
+}
+
+type EMCP_ModuleCollectionSegment {
+  items: [EMCP_Module]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_ModuleMapping {
+  moduleId: Int!
+  module: EMCP_Module
+  subscriptionProductId: Int!
+  subscriptionProduct: EMCP_SubscriptionProduct
+}
+
+type EMCP_SubscriptionProduct {
+  id: Int!
+  moduleMappings: [EMCP_ModuleMapping]
+  credits: Int!
+  description: String
+  name: String!
+  sku: String!
+}
+
+type EMCP_SubscriptionProductPool {
+  subscriptionProductId: Int!
+  subscriptionId: Int!
+  subscriptionProduct: EMCP_SubscriptionProduct
+  subscription: eeoSubscription
+  credits: Int!
+  creditsLeft: Int!
+  id: Int!
+  quantity: Int!
+  quantityLeft: Int!
+}
+
+type EMCP_SubscriptionProductUsage {
+  tenantName: String
+  activationDate: DateTime!
+  id: Int!
+  subscriptionProductPoolId: Int!
+  tenantId: Int!
+  usedCredits: Int!
+  usedQuantity: Int!
+  subscriptionProductPool: EMCP_SubscriptionProductPool
+}
+
+type EMCP_SubscriptionProductUsageCollectionSegment {
+  items: [EMCP_SubscriptionProductUsage]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type eeoSubscription {
+  subscriptionProductPools: [EMCP_SubscriptionProductPool]
+  accountId: String!
+  activationDate: DateTime
+  endDate: DateTime!
+  id: Int!
+  requester: String!
+  startDate: DateTime!
+  subscriptionNumber: String!
+}
+
+type eeoSubscriptionCollectionSegment {
+  items: [eeoSubscription]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+input EMCP_AssignSubscriptionProductInput {
+  subscriptionProductPoolId: Int!
+  quantity: Int
+}
+
+input EMCP_BillToContactInput {
+  workPhone: String
+  address1: String
+  city: String
+  country: String
+  zipCode: String
+  otherPhone: String
+  lastName: String
+}
+
+input EMCP_BillingAccountInput {
+  goldenId: String
+  crmAccountId: String
+  status: String
+  erpId: String
+  accountNumber: String
+  name: String
+  currency: String
+}
+
+input EMCP_ModuleFilterInput {
+  and: [EMCP_ModuleFilterInput!]
+  or: [EMCP_ModuleFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  iconUrl: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  imageUrl: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  visible: EMCP_BooleanOperationFilterInput
+}
+
+input EMCP_ModuleMappingFilterInput {
+  and: [EMCP_ModuleMappingFilterInput!]
+  or: [EMCP_ModuleMappingFilterInput!]
+  moduleId: ComparableEMCP_Int32OperationFilterInput
+  subscriptionProductId: ComparableEMCP_Int32OperationFilterInput
+  module: EMCP_ModuleFilterInput
+  subscriptionProduct: EMCP_SubscriptionProductFilterInput
+}
+
+input EMCP_OriginalDscMessageInput {
+  eventId: String
+  eventType: EMCP_DscEvents!
+  publishedAt: DateTime!
+  publisher: String
+  receiptHandle: String
+  billToAddress1: String
+  billToCity: String
+  billToContact: EMCP_BillToContactInput
+  billToCountry: String
+  billToLastName: String
+  billToZipCode: String
+  entitlementId: String
+  billingAccount: EMCP_BillingAccountInput
+  costType: String
+  costTypeReference: String
+  crmAccountId: String
+  currency: String
+  goldenId: String
+  platform: String
+  products: [EMCP_ProductInput]
+  provisioningDetails: String
+  shipToEmail: String
+  soldToContact: EMCP_SoldToContactInput
+  subscription: EMCP_SubscriptionDetailInput
+  subscriptionAssetNumber: String
+  subscriptionVersion: String
+  subscriptionCustomerPaymentRef: String
+  subscriptionId: String
+  subscriptionNumber: String
+  subscriptionSourceOfPurchase: String
+  subscriptionTermEndDate: DateTime
+  subscriptionTermStartDate: DateTime
+  amendContractEffectiveDate: DateTime
+}
+
+input EMCP_ProductDetailTypeInput {
+  id: String
+  sku: String
+  name: String
+  quantity: Int!
+  activationId: String
+  lastChangeType: String
+  type: String
+  effectiveStartDate: DateTime!
+  effectiveEndDate: DateTime!
+}
+
+input EMCP_ProductInput {
+  productId: String
+  productSku: String
+  productName: String
+  quantity: Int!
+}
+
+input EMCP_SoldToContactInput {
+  workPhone: String
+  address1: String
+  city: String
+  country: String
+  zipCode: String
+  otherPhone: String
+}
+
+input EMCP_SubscriptionDetailInput {
+  status: String
+  number: String
+  id: String
+  keyOriginal: String
+  key: String
+  assetNumber: String
+  assetSKU: String
+  currentTermPeriodType: String
+  trial: Boolean!
+  label: String
+  serviceActivationDate: DateTime!
+  contractEffectiveDate: DateTime!
+  termStartDate: DateTime!
+  termEndDate: DateTime!
+  currentTerm: Int!
+  version: String
+  gateManagerId: String
+  shipToEmail: String
+  entitlementId: String
+  provisioningDetails: String
+  sourceOfPurchase: String
+  costType: String
+  costTypeReference: String
+  embedded: String
+  customerPaymentRef: String
+  products: [EMCP_ProductDetailTypeInput]
+}
+
+input EMCP_SubscriptionFilterInput {
+  and: [EMCP_SubscriptionFilterInput!]
+  or: [EMCP_SubscriptionFilterInput!]
+  accountId: EMCP_StringOperationFilterInput
+  activationDate: ComparableEMCP_NullableOfDateTimeOffsetOperationFilterInput
+  endDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  requester: EMCP_StringOperationFilterInput
+  startDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  subscriptionNumber: EMCP_StringOperationFilterInput
+  subscriptionProductPools: ListEMCP_FilterInputTypeOfSubscriptionProductPoolFilterInput
+}
+
+input EMCP_SubscriptionProductFilterInput {
+  and: [EMCP_SubscriptionProductFilterInput!]
+  or: [EMCP_SubscriptionProductFilterInput!]
+  credits: ComparableEMCP_Int32OperationFilterInput
+  description: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  sku: EMCP_StringOperationFilterInput
+  moduleMappings: ListEMCP_FilterInputTypeOfModuleMappingFilterInput
+}
+
+input EMCP_SubscriptionProductPoolFilterInput {
+  and: [EMCP_SubscriptionProductPoolFilterInput!]
+  or: [EMCP_SubscriptionProductPoolFilterInput!]
+  credits: ComparableEMCP_Int32OperationFilterInput
+  creditsLeft: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  quantity: ComparableEMCP_Int32OperationFilterInput
+  quantityLeft: ComparableEMCP_Int32OperationFilterInput
+  subscriptionId: ComparableEMCP_Int32OperationFilterInput
+  subscriptionProductId: ComparableEMCP_Int32OperationFilterInput
+  subscription: EMCP_SubscriptionFilterInput
+  subscriptionProduct: EMCP_SubscriptionProductFilterInput
+  subscriptionProductUsages: ListEMCP_FilterInputTypeOfSubscriptionProductUsageFilterInput
+}
+
+input EMCP_SubscriptionProductPoolSortInput {
+  credits: SortEnumType
+  creditsLeft: SortEnumType
+  id: SortEnumType
+  quantity: SortEnumType
+  quantityLeft: SortEnumType
+  subscriptionId: SortEnumType
+  subscriptionProductId: SortEnumType
+  subscription: EMCP_SubscriptionSortInput
+  subscriptionProduct: EMCP_SubscriptionProductSortInput
+}
+
+input EMCP_SubscriptionProductSortInput {
+  credits: SortEnumType
+  description: SortEnumType
+  id: SortEnumType
+  name: SortEnumType
+  sku: SortEnumType
+}
+
+input EMCP_SubscriptionProductUsageFilterInput {
+  and: [EMCP_SubscriptionProductUsageFilterInput!]
+  or: [EMCP_SubscriptionProductUsageFilterInput!]
+  activationDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  subscriptionProductPoolId: ComparableEMCP_Int32OperationFilterInput
+  tenantId: ComparableEMCP_Int32OperationFilterInput
+  usedCredits: ComparableEMCP_Int32OperationFilterInput
+  usedQuantity: ComparableEMCP_Int32OperationFilterInput
+  subscriptionProductPool: EMCP_SubscriptionProductPoolFilterInput
+}
+
+input EMCP_SubscriptionProductUsageSortInput {
+  activationDate: SortEnumType
+  id: SortEnumType
+  subscriptionProductPoolId: SortEnumType
+  tenantId: SortEnumType
+  usedCredits: SortEnumType
+  usedQuantity: SortEnumType
+  subscriptionProductPool: EMCP_SubscriptionProductPoolSortInput
+}
+
+input EMCP_SubscriptionSortInput {
+  accountId: SortEnumType
+  activationCode: SortEnumType
+  activationDate: SortEnumType
+  endDate: SortEnumType
+  id: SortEnumType
+  requester: SortEnumType
+  startDate: SortEnumType
+  subscriptionNumber: SortEnumType
+}
+
+input ListEMCP_FilterInputTypeOfModuleMappingFilterInput {
+  all: EMCP_ModuleMappingFilterInput
+  none: EMCP_ModuleMappingFilterInput
+  some: EMCP_ModuleMappingFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfSubscriptionProductPoolFilterInput {
+  all: EMCP_SubscriptionProductPoolFilterInput
+  none: EMCP_SubscriptionProductPoolFilterInput
+  some: EMCP_SubscriptionProductPoolFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfSubscriptionProductUsageFilterInput {
+  all: EMCP_SubscriptionProductUsageFilterInput
+  none: EMCP_SubscriptionProductUsageFilterInput
+  some: EMCP_SubscriptionProductUsageFilterInput
+  any: Boolean
+}
+
+enum EMCP_DscEvents {
+  SUBSCRIPTION_CREATED
+  UPDATE_ACTIVATION_DATE
+  AMENDMENT_PROCESSED
+}
+
+type EMCP_Feature {
+  created: DateTime!
+  description: String
+  id: Int!
+  name: String!
+  packageId: Int!
+  properties: String
+  version: String!
+  package: EMCP_Package
+}
+
+type EMCP_GroupLayoutLink {
+  groupKindId: Int!
+  uilayoutId: Int!
+  groupKind: EMCP_EnumDescription
+  uilayout: EMCP_UiLayout
+}
+
+type EMCP_LayoutMicroappLink {
+  col: Int!
+  colSpan: Int
+  initialConfiguration: String
+  layoutId: Int!
+  location: String!
+  microAppId: Int!
+  row: Int!
+  rowSpan: Int
+  layout: EMCP_UiLayout
+  microApp: EMCP_MicroApp
+}
+
+type EMCP_MicroApp {
+  id: Int!
+  microAppName: String!
+  version: String!
+  layoutMicroappLinks: [EMCP_LayoutMicroappLink]
+}
+
+type EMCP_MicroAppWithColRow {
+  id: Int!
+  microAppName: String!
+  version: String
+  layouts: [EMCP_UiLayout!]!
+  location: String!
+  row: Int!
+  col: Int!
+  rowSpan: Int
+  colSpan: Int
+  initialConfiguration: String
+}
+
+type EMCP_RouteLayout {
+  category: EMCP_LayoutCategory
+  contentJsonId: Int!
+  headerJsonId: Int!
+  homepagePriority: Int!
+  id: Int!
+  menuJsonId: Int
+  pageRoute: String!
+  contentJson: EMCP_UiJson
+  headerJson: EMCP_UiJson
+  menuJson: EMCP_UiJson
+}
+
+type EMCP_TermsOfUse {
+  changes: String
+  effectiveDate: DateTime!
+  id: Int!
+  version: String!
+}
+
+type EMCP_UiJson {
+  id: Int!
+  jsonType: EMCP_LayoutJsonType!
+  label: String!
+  layoutJson: String!
+  version: String!
+  headerJsonRouteLayouts: [EMCP_RouteLayout]
+}
+
+type EMCP_UiLayout {
+  routeSchema: Any
+  template: String
+  microApps: [EMCP_MicroAppWithColRow]
+  defaultSubType: Boolean!
+  defaultVersion: Boolean
+  groupName: String
+  groupOrder: Int
+  id: Int!
+  isHomepage: Boolean!
+  label: String
+  layout: String!
+  layoutOrder: Int
+  layoutSubType: String
+  layoutType: EMCP_RouteType
+  pageRoute: String!
+  parentId: Int
+  version: String!
+  parent: EMCP_UiLayout
+  groupLayoutLinks: [EMCP_GroupLayoutLink]
+}
+
+type EMCP_UserFeatureTracking {
+  acknowledged: Boolean!
+  featureId: Int!
+  id: Int!
+  subjectId: Int!
+  feature: EMCP_Feature
+}
+
+input EMCP_GroupLayoutLinkFilterInput {
+  and: [EMCP_GroupLayoutLinkFilterInput!]
+  or: [EMCP_GroupLayoutLinkFilterInput!]
+  groupKindId: ComparableEMCP_Int32OperationFilterInput
+  uilayoutId: ComparableEMCP_Int32OperationFilterInput
+  groupKind: EMCP_EnumDescriptionFilterInput
+  uilayout: EMCP_UiLayoutFilterInput
+}
+
+input EMCP_LayoutJsonTypeOperationFilterInput {
+  eq: EMCP_LayoutJsonType
+  neq: EMCP_LayoutJsonType
+  in: [EMCP_LayoutJsonType!]
+  nin: [EMCP_LayoutJsonType!]
+}
+
+input EMCP_LayoutMicroappLinkFilterInput {
+  and: [EMCP_LayoutMicroappLinkFilterInput!]
+  or: [EMCP_LayoutMicroappLinkFilterInput!]
+  col: ComparableEMCP_Int32OperationFilterInput
+  colSpan: ComparableEMCP_NullableOfInt32OperationFilterInput
+  initialConfiguration: EMCP_StringOperationFilterInput
+  layoutId: ComparableEMCP_Int32OperationFilterInput
+  location: EMCP_StringOperationFilterInput
+  microAppId: ComparableEMCP_Int32OperationFilterInput
+  row: ComparableEMCP_Int32OperationFilterInput
+  rowSpan: ComparableEMCP_NullableOfInt32OperationFilterInput
+  layout: EMCP_UiLayoutFilterInput
+  microApp: EMCP_MicroAppFilterInput
+}
+
+input EMCP_LayoutMutationInput {
+  id: Int
+  pageRoute: String
+  label: String
+  layout: String
+  version: String
+  defaultVersion: Boolean
+  layoutOrder: Int
+  groupName: String
+  groupOrder: Int
+  parentPageRoute: String
+  layoutType: EMCP_RouteType
+  layoutSubType: String
+  defaultSubType: Boolean
+  routeSchema: String
+  isHomepage: Boolean!
+}
+
+input EMCP_MicroAppFilterInput {
+  and: [EMCP_MicroAppFilterInput!]
+  or: [EMCP_MicroAppFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  microAppName: EMCP_StringOperationFilterInput
+  version: EMCP_StringOperationFilterInput
+  layoutMicroappLinks: ListEMCP_FilterInputTypeOfLayoutMicroappLinkFilterInput
+}
+
+input EMCP_MicroAppSortInput {
+  id: SortEnumType
+  microAppName: SortEnumType
+  version: SortEnumType
+}
+
+input EMCP_NullableOfLayoutCategoryOperationFilterInput {
+  eq: EMCP_LayoutCategory
+  neq: EMCP_LayoutCategory
+  in: [EMCP_LayoutCategory]
+  nin: [EMCP_LayoutCategory]
+}
+
+input EMCP_NullableOfRouteTypeOperationFilterInput {
+  eq: EMCP_RouteType
+  neq: EMCP_RouteType
+  in: [EMCP_RouteType]
+  nin: [EMCP_RouteType]
+}
+
+input EMCP_RouteLayoutFilterInput {
+  and: [EMCP_RouteLayoutFilterInput!]
+  or: [EMCP_RouteLayoutFilterInput!]
+  category: EMCP_NullableOfLayoutCategoryOperationFilterInput
+  contentJsonId: ComparableEMCP_Int32OperationFilterInput
+  headerJsonId: ComparableEMCP_Int32OperationFilterInput
+  homepagePriority: ComparableEMCP_Int32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  menuJsonId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  pageRoute: EMCP_StringOperationFilterInput
+  contentJson: EMCP_UiJsonFilterInput
+  headerJson: EMCP_UiJsonFilterInput
+  menuJson: EMCP_UiJsonFilterInput
+}
+
+input EMCP_RouteLayoutSortInput {
+  category: SortEnumType
+  contentJsonId: SortEnumType
+  headerJsonId: SortEnumType
+  homepagePriority: SortEnumType
+  id: SortEnumType
+  menuJsonId: SortEnumType
+  pageRoute: SortEnumType
+  contentJson: EMCP_UiJsonSortInput
+  headerJson: EMCP_UiJsonSortInput
+  menuJson: EMCP_UiJsonSortInput
+}
+
+input EMCP_TermsOfUseFilterInput {
+  and: [EMCP_TermsOfUseFilterInput!]
+  or: [EMCP_TermsOfUseFilterInput!]
+  changes: EMCP_StringOperationFilterInput
+  effectiveDate: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  version: EMCP_StringOperationFilterInput
+}
+
+input EMCP_TermsOfUseSortInput {
+  changes: SortEnumType
+  effectiveDate: SortEnumType
+  id: SortEnumType
+  version: SortEnumType
+}
+
+input EMCP_UiJsonFilterInput {
+  and: [EMCP_UiJsonFilterInput!]
+  or: [EMCP_UiJsonFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  jsonType: EMCP_LayoutJsonTypeOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  layoutJson: EMCP_StringOperationFilterInput
+  version: EMCP_StringOperationFilterInput
+  headerJsonRouteLayouts: ListEMCP_FilterInputTypeOfRouteLayoutFilterInput
+}
+
+input EMCP_UiJsonSortInput {
+  id: SortEnumType
+  jsonType: SortEnumType
+  label: SortEnumType
+  layoutJson: SortEnumType
+  version: SortEnumType
+}
+
+input EMCP_UiLayoutFilterInput {
+  and: [EMCP_UiLayoutFilterInput!]
+  or: [EMCP_UiLayoutFilterInput!]
+  defaultSubType: EMCP_BooleanOperationFilterInput
+  defaultVersion: EMCP_BooleanOperationFilterInput
+  groupName: EMCP_StringOperationFilterInput
+  groupOrder: ComparableEMCP_NullableOfInt32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  isHomepage: EMCP_BooleanOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  layout: EMCP_StringOperationFilterInput
+  layoutOrder: ComparableEMCP_NullableOfInt32OperationFilterInput
+  layoutSubType: EMCP_StringOperationFilterInput
+  layoutType: EMCP_NullableOfRouteTypeOperationFilterInput
+  pageRoute: EMCP_StringOperationFilterInput
+  parentId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  routeSchema: EMCP_StringOperationFilterInput
+  version: EMCP_StringOperationFilterInput
+  parent: EMCP_UiLayoutFilterInput
+  groupLayoutLinks: ListEMCP_FilterInputTypeOfGroupLayoutLinkFilterInput
+}
+
+input EMCP_UiLayoutSortInput {
+  defaultSubType: SortEnumType
+  defaultVersion: SortEnumType
+  groupName: SortEnumType
+  groupOrder: SortEnumType
+  id: SortEnumType
+  isHomepage: SortEnumType
+  label: SortEnumType
+  layout: SortEnumType
+  layoutOrder: SortEnumType
+  layoutSubType: SortEnumType
+  layoutType: SortEnumType
+  pageRoute: SortEnumType
+  parentId: SortEnumType
+  routeSchema: SortEnumType
+  version: SortEnumType
+  parent: EMCP_UiLayoutSortInput
+  layoutSubTypeConcept: EMCP_ConceptSortInput
+}
+
+input ListEMCP_FilterInputTypeOfGroupLayoutLinkFilterInput {
+  all: EMCP_GroupLayoutLinkFilterInput
+  none: EMCP_GroupLayoutLinkFilterInput
+  some: EMCP_GroupLayoutLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfLayoutMicroappLinkFilterInput {
+  all: EMCP_LayoutMicroappLinkFilterInput
+  none: EMCP_LayoutMicroappLinkFilterInput
+  some: EMCP_LayoutMicroappLinkFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfRouteLayoutFilterInput {
+  all: EMCP_RouteLayoutFilterInput
+  none: EMCP_RouteLayoutFilterInput
+  some: EMCP_RouteLayoutFilterInput
+  any: Boolean
+}
+
+enum EMCP_LayoutCategory {
+  ONBOARDING
+}
+
+enum EMCP_LayoutJsonType {
+  HEADER
+  MENU
+  CONTENT
+}
+
+enum EMCP_RouteType {
+  HEADER
+  TAB
+  CHILD
+  VIEW
+  NEWUSER
+}
+
+type EMCP_AggregatedTimeSeries {
+  avgValueOnInterval: Decimal
+  countValueOnInterval: Long
+  deltaValueOnInterval: Decimal
+  isInteger: Boolean!
+  localTs: DateTime!
+  maxValueOnInterval: Decimal
+  minValueOnInterval: Decimal
+  slotUuid: Uuid!
+  sumValueOnInterval: Decimal
+}
+
+type EMCP_AggregatedTimeSeriesCollectionSegment {
+  items: [EMCP_AggregatedTimeSeries!]
+
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_BusinessQuantityBinnedTimeSeries {
+  businessQuantity: EMCP_BusinessQuantity!
+  measureId: Int
+  measure: EMCP_Measure
+  timeZone: String!
+  timeSeriesValues: [EMCP_BusinessQuantityBinnedTimeSeriesValue!]!
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+  surfaceAreaValue: Float
+}
+
+type EMCP_BusinessQuantityBinnedTimeSeriesCollectionSegment {
+  items: [EMCP_BusinessQuantityBinnedTimeSeries!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_BusinessQuantityBinnedTimeSeriesValue {
+  startTime: DateTime!
+  endTime: DateTime!
+  keyTime: DateTime!
+  value: Decimal
+}
+
+type EMCP_BusinessQuantityBinnedTimeSeriesValueAndCost {
+  cost: Decimal
+  startTime: DateTime!
+  endTime: DateTime!
+  keyTime: DateTime!
+  value: Decimal
+}
+
+type EMCP_BusinessQuantityBinnedUsageTimeSeries {
+  measureId: Int
+  usageId: Int!
+  businessQuantity: EMCP_BusinessQuantity!
+  measure: EMCP_Measure
+  timeZone: String!
+  timeSeriesValues: [EMCP_BusinessQuantityBinnedTimeSeriesValue!]!
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+  surfaceAreaValue: Float
+}
+
+type EMCP_BusinessQuantityBinnedUsageTimeSeriesCollectionSegment {
+  items: [EMCP_BusinessQuantityBinnedUsageTimeSeries!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCosts {
+  businessQuantity: EMCP_BusinessQuantity!
+  usageId: Int!
+  measureId: Int
+  measure: EMCP_Measure
+  timeZone: String!
+  timeSeriesValuesAndCosts: [EMCP_BusinessQuantityBinnedTimeSeriesValueAndCost!]!
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+  surfaceAreaValue: Float
+  surfaceAreaUnit: EMCP_Unit
+  rateIsConfigured: Boolean!
+}
+
+type EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsCollectionSegment {
+  items: [EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCosts!]
+
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_BusinessQuantityTimeSeries {
+  businessQuantity: EMCP_BusinessQuantity!
+  measureId: Int
+  measure: EMCP_Measure
+  timeZone: String!
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+  timeSeriesValues: [EMCP_BusinessQuantityTimeSeriesValue!]!
+}
+
+type EMCP_BusinessQuantityTimeSeriesCollectionSegment {
+  items: [EMCP_BusinessQuantityTimeSeries!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_BusinessQuantityTimeSeriesValue {
+  timestamp: DateTime!
+  value: Decimal
+}
+
+type EMCP_BusinessQuantityUsageData {
+  value: Decimal
+  usageId: Int!
+  unit: EMCP_Unit
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  businessQuantityName: String!
+}
+
+type EMCP_BusinessQuantityUsageDataCollectionSegment {
+  items: [EMCP_BusinessQuantityUsageData!]
+
+ 
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_EnergyUsageSummary {
+  compareTo: Int!
+  businessQuantity: EMCP_BusinessQuantity!
+  startDate: DateTime!
+  endDate: DateTime!
+  timeZone: String!
+  measuringThing: EMCP_Thing!
+  unit: EMCP_Unit!
+  usageId: Int!
+  startValue: Decimal
+  endValue: Decimal
+  intervalValue: Decimal
+  topoContext: [EMCP_TopoNodeContext!]!
+  energyRate: Decimal
+  energyCost: Decimal
+}
+
+type EMCP_EnergyUsageSummaryCollectionSegment {
+  items: [EMCP_EnergyUsageSummary!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_RankedEnergyIntensityValue {
+  measureId: Int
+  surfaceArea: Float
+  energyIntensity: Decimal
+  ranking: Int!
+  value: Decimal
+  usagesConfigured: Boolean!
+  measure: EMCP_Measure
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+}
+
+type EMCP_RankedEnergyIntensityValueCollectionSegment {
+  items: [EMCP_RankedEnergyIntensityValue!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_RankedMeasureValue {
+  ranking: Int!
+  value: Decimal
+  usagesConfigured: Boolean!
+  measureId: Int
+  measure: EMCP_Measure
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+}
+
+type EMCP_RankedMeasureValueCollectionSegment {
+  items: [EMCP_RankedMeasureValue!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_RankedUsageIntensityValue {
+  measureId: Int
+  surfaceArea: Float
+  usageIntensity: Decimal
+  ranking: Int!
+  value: Decimal
+  usagesConfigured: Boolean!
+  measure: EMCP_Measure
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+}
+
+type EMCP_RankedUsageIntensityValueCollectionSegment {
+  items: [EMCP_RankedUsageIntensityValue!]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+input ComparableEMCP_NullableOfDecimalOperationFilterInput {
+  eq: Decimal
+  neq: Decimal
+  in: [Decimal]
+  nin: [Decimal]
+  gt: Decimal
+  ngt: Decimal
+  gte: Decimal
+  ngte: Decimal
+  lt: Decimal
+  nlt: Decimal
+  lte: Decimal
+  nlte: Decimal
+}
+
+input EMCP_BinnedEnergyConsumptionInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  aggregationInterval: EMCP_AggregationInterval!
+}
+
+input EMCP_BinnedUsageCostDataInput {
+  businessQuantityName: String!
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  aggregationInterval: EMCP_AggregationInterval!
+}
+
+input EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput {
+  and: [EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput!]
+  or: [EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput!]
+  cost: ComparableEMCP_NullableOfDecimalOperationFilterInput
+  startTime: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  endTime: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  keyTime: ComparableEMCP_DateTimeOffsetOperationFilterInput
+  value: ComparableEMCP_NullableOfDecimalOperationFilterInput
+}
+
+input EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsFilterInput {
+  and: [EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsFilterInput!]
+  or: [EMCP_BusinessQuantityBinnedUsageTimeSeriesWithCostsFilterInput!]
+  businessQuantity: EMCP_BusinessQuantityFilterInput
+  usageId: ComparableEMCP_Int32OperationFilterInput
+  measureId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  measure: EMCP_MeasureFilterInput
+  timeZone: EMCP_StringOperationFilterInput
+  timeSeriesValuesAndCosts: ListEMCP_FilterInputTypeOfBusinessQuantityBinnedTimeSeriesValueAndCostFilterInput
+  thingId: ComparableEMCP_Int32OperationFilterInput
+  thingLabel: EMCP_StringOperationFilterInput
+  thingContext: ListEMCP_FilterInputTypeOfTopoNodeContextFilterInput
+  surfaceAreaValue: ComparableEMCP_NullableOfDoubleOperationFilterInput
+  surfaceAreaUnit: EMCP_UnitFilterInput
+  rateIsConfigured: EMCP_BooleanOperationFilterInput
+}
+
+input EMCP_EnergyUsageSummaryInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  topoConceptUrn: String
+}
+
+input EMCP_FilterTypeOperationFilterInput {
+  eq: EMCP_FilterType
+  neq: EMCP_FilterType
+  in: [EMCP_FilterType!]
+  nin: [EMCP_FilterType!]
+}
+
+input EMCP_GetUsageDataInput {
+  businessQuantityName: String!
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+  splitByChildNodes: Boolean!
+}
+
+input EMCP_RankedEnergyIntensityInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  topoConceptUrn: String
+}
+
+input EMCP_RankedEnergyIntensityValueSortInput {
+  measureId: SortEnumType
+  surfaceArea: SortEnumType
+  energyIntensity: SortEnumType
+  ranking: SortEnumType
+  value: SortEnumType
+  usagesConfigured: SortEnumType
+  measure: EMCP_MeasureSortInput
+  thingId: SortEnumType
+  thingLabel: SortEnumType
+}
+
+input EMCP_RankedMeasureValueSortInput {
+  ranking: SortEnumType
+  value: SortEnumType
+  usagesConfigured: SortEnumType
+  measureId: SortEnumType
+  measure: EMCP_MeasureSortInput
+  thingId: SortEnumType
+  thingLabel: SortEnumType
+}
+
+input EMCP_RankedUsageIntensityInput {
+  startTime: DateTime!
+  endTime: DateTime!
+  topoConceptUrn: String
+  businessQuantity: String!
+}
+
+input EMCP_RankedUsageIntensityValueSortInput {
+  measureId: SortEnumType
+  surfaceArea: SortEnumType
+  usageIntensity: SortEnumType
+  ranking: SortEnumType
+  value: SortEnumType
+  usagesConfigured: SortEnumType
+  measure: EMCP_MeasureSortInput
+  thingId: SortEnumType
+  thingLabel: SortEnumType
+}
+
+input EMCP_TopoNodeContextFilterInput {
+  and: [EMCP_TopoNodeContextFilterInput!]
+  or: [EMCP_TopoNodeContextFilterInput!]
+  id: ComparableEMCP_Int32OperationFilterInput
+  type: EMCP_FilterTypeOperationFilterInput
+  urn: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  value: EMCP_StringOperationFilterInput
+}
+
+input ListEMCP_FilterInputTypeOfBusinessQuantityBinnedTimeSeriesValueAndCostFilterInput {
+  all: EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput
+  none: EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput
+  some: EMCP_BusinessQuantityBinnedTimeSeriesValueAndCostFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfTopoNodeContextFilterInput {
+  all: EMCP_TopoNodeContextFilterInput
+  none: EMCP_TopoNodeContextFilterInput
+  some: EMCP_TopoNodeContextFilterInput
+  any: Boolean
+}
+
+enum EMCP_AggregationDayLightSavingTimeBehaviorType {
+  AGGREGATE
+  SEPARATE
+}
+
+enum EMCP_AggregationInterval {
+  NONE
+  YEAR
+  MONTH
+  DAY
+  HOUR
+  MINUTE
+  SECOND
+}
+
+enum EMCP_AggregationQualityBehaviorType {
+  INCLUDE
+}
+
+enum EMCP_NormalizationFactor {
+  NONE
+  CDD
+  HDD
+  CDDHDD
+}
+
+enum EMCP_SpecialFilter {
+  NONE
+  OPENED_HOURS
+  CLOSED_HOURS
+}
+
+type EMCP_CreateAiModelPayload {
+  debugMessage: String
+  payloadCode: EMCP_CreateAiModelPayloadStatus!
+  payloadMessage: String
+}
+
+type EMCP_EaaSimpleAiThing {
+  predictedPhaseA: EMCP_EaaSimpleSlot
+  predictedPhaseB: EMCP_EaaSimpleSlot
+  predictedPhaseC: EMCP_EaaSimpleSlot
+  id: Int!
+  label: String
+}
+
+type EMCP_EaaSimpleCL110 {
+  ambientTemperature: EMCP_EaaSimpleSlot
+  id: Int!
+  label: String
+}
+
+type EMCP_EaaSimpleCircuitBreaker {
+  currentPhaseA: EMCP_EaaSimpleSlot
+  currentPhaseB: EMCP_EaaSimpleSlot
+  currentPhaseC: EMCP_EaaSimpleSlot
+  id: Int!
+  label: String
+}
+
+type EMCP_EaaSimplePanel {
+  circuitBreaker: EMCP_EaaSimpleCircuitBreaker
+  tH110A: EMCP_EaaSimpleTH110
+  tH110B: EMCP_EaaSimpleTH110
+  tH110C: EMCP_EaaSimpleTH110
+  cL110: EMCP_EaaSimpleCL110
+  id: Int!
+  label: String
+}
+
+type EMCP_EaaSimplePrefab {
+  panel: EMCP_EaaSimplePanel
+  id: Int!
+  label: String
+}
+
+type EMCP_EaaSimpleSlot {
+  uuid: Uuid!
+  unitUrn: String
+  measureUrn: String
+}
+
+type EMCP_EaaSimpleTH110 {
+  phaseTemperature: EMCP_EaaSimpleSlot
+  id: Int!
+  label: String
+}
+
+type EMCP_GetAiModuleStatusPayload {
+  aiModuleId: String!
+  aiModelId: String
+  debugMessage: String
+  status: String
+  payloadCode: EMCP_GetAiModuleStatusPayloadStatus!
+  payloadMessage: String
+}
+
+type EMCP_GetAiStructurePayload {
+  aiThing: EMCP_EaaSimpleAiThing
+  prefab: EMCP_EaaSimplePrefab
+}
+
+input EMCP_CreateAiModelInput {
+  aiModuleId: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  properties: Any
+}
+
+input EMCP_GetAiModuleStatusInput {
+  aiModuleId: String!
+}
+
+input EMCP_GetAiStructureInput {
+  tenantId: Int!
+  prefabId: Int!
+}
+
+enum EMCP_CreateAiModelPayloadStatus {
+  UNKNOWN
+  AI_HUB_CONTACT_ERROR
+  AUTHENTICATION_ERROR
+  AI_MODULE_NOT_FOUND
+  SUCCESS
+}
+
+enum EMCP_GetAiModuleStatusPayloadStatus {
+  UNKNOWN
+  AI_HUB_CONTACT_ERROR
+  AI_HUB_READING_RESPONSE_ERROR
+  AUTHENTICATION_ERROR
+  AI_MODULE_NOT_FOUND
+  NOT_YET_TRAINED
+  SUCCESS
+}
+
+type EMCP_AlarmEventConceptCategoryModuleMapping {
+  alarmEventConceptCategoryId: Int!
+  moduleId: Int!
+  packageId: Int!
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategory
+  module: EMCP_Module
+  package: EMCP_Package
+}
+
+type EMCP_ConceptTypeMapping {
+  defaultCr: String
+  destinationKey: String!
+  destinationKind: EMCP_MappingKindType!
+  destinationValue: String!
+  id: Int!
+  packageId: Int!
+  sourceKey: String!
+  sourceKind: EMCP_MappingKindType!
+  sourceValue: String!
+  sourceValueDescription: String
+  package: EMCP_Package
+}
+
+type EMCP_NodeInfo {
+  dataType: String!
+  id: Int!
+  key: String!
+  label: String!
+  packageId: Int!
+  package: EMCP_Package
+  nodeInfoLayouts: [EMCP_NodeInfoLayout]
+}
+
+type EMCP_NodeInfoLayout {
+  conceptId: Int
+  displayMode: String!
+  id: Int!
+  nodeInfoId: Int
+  packageId: Int!
+  position: Int!
+  topologyMode: String!
+  nodeInfo: EMCP_NodeInfo
+  package: EMCP_Package
+}
+
+type EMCP_PhaseDescription {
+  description: String
+  name: String
+  packageId: Int!
+  package: EMCP_Package
+}
+
+type EMCP_Standard {
+  description: String!
+  label: String!
+  packageId: Int!
+  standardId: String
+  visible: EMCP_VisibleType
+  package: EMCP_Package
+  standardDescriptions: [EMCP_StandardDescription]
+}
+
+type EMCP_StandardDescription {
+  applicableEnumItemId: String
+  applicableEnumValueId: Int
+  id: Int!
+  packageId: Int!
+  sourceEnumItemId: String!
+  sourceEnumParentUrn: String!
+  sourceEnumValueId: Int!
+  standardId: String!
+  package: EMCP_Package
+  standard: EMCP_Standard
+}
+
+input EMCP_AlarmEventConceptCategoryModuleMappingFilterInput {
+  and: [EMCP_AlarmEventConceptCategoryModuleMappingFilterInput!]
+  or: [EMCP_AlarmEventConceptCategoryModuleMappingFilterInput!]
+  alarmEventConceptCategoryId: ComparableEMCP_Int32OperationFilterInput
+  moduleId: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategoryFilterInput
+  module: EMCP_ModuleFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_ConceptTypeMappingFilterInput {
+  and: [EMCP_ConceptTypeMappingFilterInput!]
+  or: [EMCP_ConceptTypeMappingFilterInput!]
+  defaultCr: EMCP_StringOperationFilterInput
+  destinationKey: EMCP_StringOperationFilterInput
+  destinationKind: EMCP_MappingKindTypeOperationFilterInput
+  destinationValue: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  sourceKey: EMCP_StringOperationFilterInput
+  sourceKind: EMCP_MappingKindTypeOperationFilterInput
+  sourceValue: EMCP_StringOperationFilterInput
+  sourceValueDescription: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_NodeInfoFilterInput {
+  and: [EMCP_NodeInfoFilterInput!]
+  or: [EMCP_NodeInfoFilterInput!]
+  dataType: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  key: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+  nodeInfoLayouts: ListEMCP_FilterInputTypeOfNodeInfoLayoutFilterInput
+}
+
+input EMCP_NodeInfoLayoutFilterInput {
+  and: [EMCP_NodeInfoLayoutFilterInput!]
+  or: [EMCP_NodeInfoLayoutFilterInput!]
+  conceptId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  displayMode: EMCP_StringOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  nodeInfoId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  position: ComparableEMCP_Int32OperationFilterInput
+  topologyMode: EMCP_StringOperationFilterInput
+  nodeInfo: EMCP_NodeInfoFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_PhaseDescriptionFilterInput {
+  and: [EMCP_PhaseDescriptionFilterInput!]
+  or: [EMCP_PhaseDescriptionFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  name: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  package: EMCP_PackageFilterInput
+}
+
+input EMCP_StandardDescriptionFilterInput {
+  and: [EMCP_StandardDescriptionFilterInput!]
+  or: [EMCP_StandardDescriptionFilterInput!]
+  applicableEnumItemId: EMCP_StringOperationFilterInput
+  applicableEnumValueId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  sourceEnumItemId: EMCP_StringOperationFilterInput
+  sourceEnumParentUrn: EMCP_StringOperationFilterInput
+  sourceEnumValueId: ComparableEMCP_Int32OperationFilterInput
+  standardId: EMCP_StringOperationFilterInput
+  package: EMCP_PackageFilterInput
+  standard: EMCP_StandardFilterInput
+}
+
+input EMCP_StandardFilterInput {
+  and: [EMCP_StandardFilterInput!]
+  or: [EMCP_StandardFilterInput!]
+  description: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  standardId: EMCP_StringOperationFilterInput
+  visible: EMCP_NullableOfVisibleTypeOperationFilterInput
+  package: EMCP_PackageFilterInput
+  standardDescriptions: ListEMCP_FilterInputTypeOfStandardDescriptionFilterInput
+}
+
+input ListEMCP_FilterInputTypeOfNodeInfoLayoutFilterInput {
+  all: EMCP_NodeInfoLayoutFilterInput
+  none: EMCP_NodeInfoLayoutFilterInput
+  some: EMCP_NodeInfoLayoutFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfStandardDescriptionFilterInput {
+  all: EMCP_StandardDescriptionFilterInput
+  none: EMCP_StandardDescriptionFilterInput
+  some: EMCP_StandardDescriptionFilterInput
+  any: Boolean
+}
+
+type EMCP_NotificationTokenData {
+  userId: Int @deprecated(reason: "Please move to subjecId")
+  token: String!
+  platform: EMCP_PlatformType!
+  subjectId: Int!
+}
+
+type EMCP_NotificationTokenDataCollectionSegment {
+  items: [EMCP_NotificationTokenData]
+
+  
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_NotificationTokenModel {
+  userId: String
+  token: String
+  platform: EMCP_PlatformType!
+}
+
+input EMCP_NotificationTokenFilterInput {
+  and: [EMCP_NotificationTokenFilterInput!]
+  or: [EMCP_NotificationTokenFilterInput!]
+  platform: EMCP_PlatformTypeOperationFilterInput
+  subjectId: ComparableEMCP_Int32OperationFilterInput
+  token: EMCP_StringOperationFilterInput
+}
+
+input EMCP_NotificationTokenModelInput {
+  userId: String
+  token: String
+  platform: EMCP_PlatformType!
+}
+
+input EMCP_PlatformTypeOperationFilterInput {
+  eq: EMCP_PlatformType
+  neq: EMCP_PlatformType
+  in: [EMCP_PlatformType!]
+  nin: [EMCP_PlatformType!]
+}
+
+enum EMCP_PlatformType {
+  IOS
+  ANDROID
+}
+
+type AlgorithmMeasureLink {
+  id: Int!
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputMeasureId: Int!
+  inputTagId: Int
+  inputTagValue: String
+
+  
+  conceptByEquipmentConceptId: Concept
+
+  
+  conceptByAlgorithmConceptId: Concept
+
+  
+  measureByInputMeasureId: Measure
+}
+
+
+type AlgorithmMeasureLinksConnection {
+
+  nodes: [AlgorithmMeasureLink]!
+
+  
+  edges: [AlgorithmMeasureLinksEdge!]!
+
+  
+  pageInfo: PageInfo!
+
+  totalCount: Int!
+}
+
+
+type AlgorithmMeasureLinksEdge {
+  
+  cursor: Any
+
+  
+  node: AlgorithmMeasureLink
+}
+
+type AlgorithmPropertyLink {
+  id: Int!
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputPropertyId: Int!
+
+  
+  conceptByEquipmentConceptId: Concept
+
+ 
+  conceptByAlgorithmConceptId: Concept
+}
+
+
+type AlgorithmPropertyLinksConnection {
+  
+  nodes: [AlgorithmPropertyLink]!
+
+  
+  edges: [AlgorithmPropertyLinksEdge!]!
+
+  
+  pageInfo: PageInfo!
+
+  
+  totalCount: Int!
+}
+
+
+type AlgorithmPropertyLinksEdge {
+  
+  cursor: Any
+
+  
+  node: AlgorithmPropertyLink
+}
+
+type Concept {
+  id: Int!
+  packageid: Int!
+  urn: String!
+  name: String!
+  conceptkind: Conceptkindtype!
+  version: Int!
+  label: String!
+  icon: String
+  description: String
+  inherit: Boolean!
+  parentconceptid: Int
+  ui: Any!
+
+  
+  conceptByParentconceptid: Concept
+
+  
+  conceptsByParentconceptid(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [ConceptsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: ConceptCondition
+  ): ConceptsConnection!
+
+  
+  thingsByConceptid(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+   
+    after: Any
+
+    
+    orderBy: [ThingsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: ThingCondition
+  ): ThingsConnection!
+
+  
+  measureLinksByConceptId(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: MeasureLinkCondition
+  ): MeasureLinksConnection!
+
+  
+  algorithmPropertyLinksByEquipmentConceptId(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmPropertyLinkCondition
+  ): AlgorithmPropertyLinksConnection!
+
+  
+  algorithmPropertyLinksByAlgorithmConceptId(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmPropertyLinkCondition
+  ): AlgorithmPropertyLinksConnection!
+
+  
+  algorithmMeasureLinksByEquipmentConceptId(
+    
+    first: Int
+
+    
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmMeasureLinkCondition
+  ): AlgorithmMeasureLinksConnection!
+
+  
+  algorithmMeasureLinksByAlgorithmConceptId(
+    
+    first: Int
+
+   
+    last: Int
+
+    
+    offset: Int
+
+    
+    before: Any
+
+    
+    after: Any
+
+    
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    
+    condition: AlgorithmMeasureLinkCondition
+  ): AlgorithmMeasureLinksConnection!
+}
+
+
+type ConceptsConnection {
+  
+  nodes: [Concept]!
+
+  
+  edges: [ConceptsEdge!]!
+
+  
+  pageInfo: PageInfo!
+
+  
+  totalCount: Int!
+}
+
+
+type ConceptsEdge {
+  
+  cursor: Any
+
+  
+  node: Concept
+}
+
+
+type CreateAlgorithmMeasureLinkPayload {
+  
+  clientMutationId: String
+
+  
+  algorithmMeasureLink: AlgorithmMeasureLink
+
+  
+  query: Query
+
+  
+  conceptByEquipmentConceptId: Concept
+
+  
+  conceptByAlgorithmConceptId: Concept
+
+  
+  measureByInputMeasureId: Measure
+
+  algorithmMeasureLinkEdge(
+    
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmMeasureLinksEdge
+}
+
+type CreateAlgorithmPropertyLinkPayload {
+  clientMutationId: String
+
+  algorithmPropertyLink: AlgorithmPropertyLink
+
+  
+  query: Query
+
+  conceptByEquipmentConceptId: Concept
+
+  conceptByAlgorithmConceptId: Concept
+
+  algorithmPropertyLinkEdge(
+
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmPropertyLinksEdge
+}
+
+type CreateDbupjournalDmlPayload {
+ 
+  clientMutationId: String
+
+ 
+  dbupjournalDml: DbupjournalDml
+
+  query: Query
+
+  dbupjournalDmlEdge(
+ 
+    orderBy: [DbupjournalDmlsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DbupjournalDmlsEdge
+}
+
+type CreateMeasureLinkPayload {
+ 
+  clientMutationId: String
+
+  measureLink: MeasureLink
+
+  query: Query
+
+  conceptByConceptId: Concept
+
+  measureByMeasureId: Measure
+
+  measureLinkEdge(
+
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MeasureLinksEdge
+}
+
+type CreateNodelinkPvaluePayload {
+
+  clientMutationId: String
+
+  nodelinkPvalue: NodelinkPvalue
+
+  
+  query: Query
+
+  nodelinkByNodelinkId: Nodelink
+
+  nodelinkPvalueEdge(
+
+    orderBy: [NodelinkPvaluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NodelinkPvaluesEdge
+}
+
+type CreateSubjectidPayload {
+
+  clientMutationId: String
+
+  subjectid: Subjectid
+
+  query: Query
+
+  subjectidEdge(
+
+    orderBy: [SubjectidsOrderBy!] = [NATURAL]
+  ): SubjectidsEdge
+}
+
+type DbupjournalDml {
+  schemaversionsid: Int!
+  scriptname: String!
+  applied: DateTime!
+}
+
+type DbupjournalDmlsConnection {
+
+  nodes: [DbupjournalDml]!
+
+  edges: [DbupjournalDmlsEdge!]!
+
+  pageInfo: PageInfo!
+
+  totalCount: Int!
+}
+
+type DbupjournalDmlsEdge {
+
+  cursor: Any
+
+  node: DbupjournalDml
+}
+
+type DeleteAlgorithmMeasureLinkPayload {
+
+  clientMutationId: String
+
+  algorithmMeasureLink: AlgorithmMeasureLink
+  deletedAlgorithmMeasureLinkId: ID
+
+  query: Query
+
+  conceptByEquipmentConceptId: Concept
+
+  conceptByAlgorithmConceptId: Concept
+
+  measureByInputMeasureId: Measure
+
+  algorithmMeasureLinkEdge(
+ 
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmMeasureLinksEdge
+}
+
+type DeleteAlgorithmPropertyLinkPayload {
+
+  clientMutationId: String
+
+  algorithmPropertyLink: AlgorithmPropertyLink
+  deletedAlgorithmPropertyLinkId: ID
+
+  query: Query
+
+  conceptByEquipmentConceptId: Concept
+
+  conceptByAlgorithmConceptId: Concept
+
+  algorithmPropertyLinkEdge(
+   
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmPropertyLinksEdge
+}
+
+type DeleteDbupjournalDmlPayload {
+ 
+  clientMutationId: String
+
+  dbupjournalDml: DbupjournalDml
+  deletedDbupjournalDmlId: ID
+
+  query: Query
+
+  dbupjournalDmlEdge(
+    
+    orderBy: [DbupjournalDmlsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DbupjournalDmlsEdge
+}
+
+type DeleteFunctionPayload {
+ 
+  clientMutationId: String
+  thing: Thing
+
+  query: Query
+
+  conceptByConceptid: Concept
+
+  thingEdge(
+
+    orderBy: [ThingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ThingsEdge
+}
+
+type DeleteMeasureLinkPayload {
+
+  clientMutationId: String
+
+  measureLink: MeasureLink
+  deletedMeasureLinkId: ID
+
+  query: Query
+  conceptByConceptId: Concept
+
+  measureByMeasureId: Measure
+
+  measureLinkEdge(
+
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MeasureLinksEdge
+}
+
+type DeleteNodelinkPvaluePayload {
+
+  clientMutationId: String
+  nodelinkPvalue: NodelinkPvalue
+  deletedNodelinkPvalueId: ID
+  query: Query
+  nodelinkByNodelinkId: Nodelink
+  nodelinkPvalueEdge(
+    orderBy: [NodelinkPvaluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NodelinkPvaluesEdge
+}
+type DeleteTenantPayload {
+  clientMutationId: String
+  thing: Thing
+  query: Query
+  conceptByConceptid: Concept
+  thingEdge(
+    orderBy: [ThingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ThingsEdge
+}
+type GetActiveAlarmCountEdge {
+  cursor: Any
+  node: GetActiveAlarmCountsRecord
+}
+type GetActiveAlarmCountsConnection {
+  nodes: [GetActiveAlarmCountsRecord]!
+  edges: [GetActiveAlarmCountEdge!]!
+  totalCount: Int!
+}
+type GetActiveAlarmCountsRecord {
+  thingid: Int
+  activeCount: Int
+  latestTimestamp: DateTime
+}
+type GetContextDetailsForThingConnection {
+  nodes: [GetContextDetailsForThingRecord]!
+  edges: [GetContextDetailsForThingEdge!]!
+
+  totalCount: Int!
+}
+type GetContextDetailsForThingEdge {
+  cursor: Any
+  node: GetContextDetailsForThingRecord
+}
+
+type GetContextDetailsForThingRecord {
+  type: Filtertype
+  id: Int
+  urn: String
+  name: String
+  label: String
+  handle: String
+}
+
+type Hierarchyinfotype {
+  id: Int
+  parentid: Int
+  urn: String
+  label: String
+  type: String
+  level: Int
+  propertyvalues: Any
+  thingById: Thing
+  thingByParentid: Thing
+}
+type HierarchyinfotypesConnection {
+  nodes: [Hierarchyinfotype]!
+  edges: [HierarchyinfotypesEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type HierarchyinfotypesEdge {
+  cursor: Any
+  node: Hierarchyinfotype
+}
+
+type Measure {
+  id: Int!
+  urn: String!
+  packageid: Int!
+  name: String!
+  label: String
+  encoding: Encodingtype!
+  accumulation: Accumulationtype!
+  statistical: Statisticaltype!
+  timeaggregation: Timeaggregationtype!
+  unitid: Int!
+  createdate: DateTime!
+  updatedate: DateTime!
+  description: String
+  enumparent: Int
+  uipreferenceid: Int
+  unitByUnitid: Unit
+  nodelinksBySrcmeasureid(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [NodelinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: NodelinkCondition
+  ): NodelinksConnection!
+  nodelinksByDstmeasureid(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [NodelinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: NodelinkCondition
+  ): NodelinksConnection!
+  measureLinksByMeasureId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: MeasureLinkCondition
+  ): MeasureLinksConnection!
+  algorithmMeasureLinksByInputMeasureId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: AlgorithmMeasureLinkCondition
+  ): AlgorithmMeasureLinksConnection!
+}
+
+type MeasureLink {
+  id: Int!
+  packageId: Int!
+  conceptId: Int!
+  measureId: Int!
+  tagId: Int
+  tagValue: String
+
+  conceptByConceptId: Concept
+
+  measureByMeasureId: Measure
+}
+
+type MeasureLinksConnection {
+
+  nodes: [MeasureLink]!
+
+  edges: [MeasureLinksEdge!]!
+
+  pageInfo: PageInfo!
+
+  totalCount: Int!
+}
+type MeasureLinksEdge {
+  cursor: Any
+
+  node: MeasureLink
+}
+type MeasuresConnection {
+  nodes: [Measure]!
+  edges: [MeasuresEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type MeasuresEdge {
+  cursor: Any
+  node: Measure
+}
+
+type Mvalue {
+  slotuuid: Uuid!
+  tenantid: Int!
+  ts: DateTime!
+  mfval: Float
+  mival: Any
+  quality: Valuequalitytype
+}
+type MvaluesConnection {
+  nodes: [Mvalue]!
+  edges: [MvaluesEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type MvaluesEdge {
+  cursor: Any
+  node: Mvalue
+}
+
+type Nodeinfodetailtype {
+  key: String
+  label: String
+  position: Int
+  datatype: String
+  unitid: Int
+  value: String
+  unitByUnitid: Unit
+}
+
+type Nodeinfotype {
+  id: Int
+  parentid: Int
+  nodeinfodetail: [Nodeinfodetailtype]
+  thingById: Thing
+  thingByParentid: Thing
+}
+type NodeinfotypesConnection {
+  nodes: [Nodeinfotype]!
+  edges: [NodeinfotypesEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type NodeinfotypesEdge {
+  cursor: Any
+  node: Nodeinfotype
+}
+
+type Nodelink {
+  id: Int!
+  srcid: Int!
+  srcnode: Nodekindtype!
+  dstid: Int!
+  dstnode: Nodekindtype!
+  kind: Linkkindtype!
+  createdate: DateTime!
+  srcmeasureid: Int
+  srctagvalue: String
+  srceventconceptid: Int
+  srcalarmconceptid: Int
+  srcpropertyid: Int
+  dstmeasureid: Int
+  dsttagvalue: String
+  dsteventconceptid: Int
+  dstalarmconceptid: Int
+  dstpropertyid: Int
+  percentage: Float!
+  srctagid: Int
+  dsttagid: Int
+
+  thingBySrcid: Thing
+
+  thingByDstid: Thing
+  measureBySrcmeasureid: Measure
+  measureByDstmeasureid: Measure
+  nodelinkPvaluesByNodelinkId(
+    first: Int
+    last: Int
+    offset: Int
+
+    before: Any
+
+    after: Any
+
+    orderBy: [NodelinkPvaluesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    condition: NodelinkPvalueCondition
+  ): NodelinkPvaluesConnection!
+}
+
+type NodelinkPvalue {
+  id: Int!
+  nodelinkId: Int!
+  propertyId: Int!
+  createDate: DateTime!
+  updateDate: DateTime!
+  pfval: Float
+  psval: String
+  pival: Int
+  ptsval: DateTime
+  nodelinkByNodelinkId: Nodelink
+}
+type NodelinkPvaluesConnection {
+  nodes: [NodelinkPvalue]!
+  edges: [NodelinkPvaluesEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type NodelinkPvaluesEdge {
+  cursor: Any
+  node: NodelinkPvalue
+}
+
+type NodelinksConnection {
+  nodes: [Nodelink]!
+  edges: [NodelinksEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type NodelinksEdge {
+  cursor: Any
+
+  node: Nodelink
+}
+
+type PageInfo {
+
+  hasNextPage: Boolean!
+
+  hasPreviousPage: Boolean!
+
+  startCursor: Any
+
+  endCursor: Any
+}
+
+type Singlelinevaluestype {
+  dstthingid: Int
+  dstnode: Nodekindtype
+  srcthingid: Int
+  businessquantityname: String
+  measureid: Int
+  values: [Mvalue]
+
+  thingByDstthingid: Thing
+
+  thingBySrcthingid: Thing
+
+  measureByMeasureid: Measure
+}
+
+type SinglelinevaluestypesConnection {
+
+  nodes: [Singlelinevaluestype]!
+  edges: [SinglelinevaluestypesEdge!]!
+
+  pageInfo: PageInfo!
+
+  totalCount: Int!
+}
+
+type SinglelinevaluestypesEdge {
+
+  cursor: Any
+  node: Singlelinevaluestype
+}
+type Subjectid {
+  subjectId: Int
+}
+type SubjectidsConnection {
+  nodes: [Subjectid]!
+  edges: [SubjectidsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type SubjectidsEdge {
+  cursor: Any
+  node: Subjectid
+}
+
+type Thing {
+  id: Int!
+  conceptid: Int!
+  name: String!
+  label: String!
+  tenantid: Int
+  handle: String
+  createdate: DateTime!
+  updatedate: DateTime!
+  version: Int
+  conceptByConceptid: Concept
+  nodelinksBySrcid(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [NodelinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: NodelinkCondition
+  ): NodelinksConnection!
+  nodelinksByDstid(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [NodelinksOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: NodelinkCondition
+  ): NodelinksConnection!
+}
+type ThingsConnection {
+  nodes: [Thing]!
+  edges: [ThingsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+type ThingsEdge {
+  cursor: Any
+  node: Thing
+}
+
+type Unit {
+  id: Int!
+  urn: String!
+  symbol: String!
+  issi: Boolean
+  quantityname: Quantitynametype
+  description: String
+  packageid: Int!
+  measuresByUnitid(
+    first: Int
+    last: Int
+    offset: Int
+    before: Any
+    after: Any
+    orderBy: [MeasuresOrderBy!] = [PRIMARY_KEY_ASC]
+    condition: MeasureCondition
+  ): MeasuresConnection!
+}
+type UpdateAlgorithmMeasureLinkPayload {
+  clientMutationId: String
+  algorithmMeasureLink: AlgorithmMeasureLink
+  query: Query
+  conceptByEquipmentConceptId: Concept
+  conceptByAlgorithmConceptId: Concept
+  measureByInputMeasureId: Measure
+  algorithmMeasureLinkEdge(
+    orderBy: [AlgorithmMeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmMeasureLinksEdge
+}
+type UpdateAlgorithmPropertyLinkPayload {
+  clientMutationId: String
+  algorithmPropertyLink: AlgorithmPropertyLink
+  query: Query
+  conceptByEquipmentConceptId: Concept
+  conceptByAlgorithmConceptId: Concept
+  algorithmPropertyLinkEdge(
+    orderBy: [AlgorithmPropertyLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AlgorithmPropertyLinksEdge
+}
+type UpdateDbupjournalDmlPayload {
+  clientMutationId: String
+  dbupjournalDml: DbupjournalDml
+  query: Query
+  dbupjournalDmlEdge(
+    orderBy: [DbupjournalDmlsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DbupjournalDmlsEdge
+}
+type UpdateMeasureLinkPayload {
+  clientMutationId: String
+  measureLink: MeasureLink
+  query: Query
+  conceptByConceptId: Concept
+  measureByMeasureId: Measure
+  measureLinkEdge(
+    orderBy: [MeasureLinksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): MeasureLinksEdge
+}
+
+type UpdateNodelinkPvaluePayload {
+  clientMutationId: String
+  nodelinkPvalue: NodelinkPvalue
+  query: Query
+  nodelinkByNodelinkId: Nodelink
+  nodelinkPvalueEdge(
+    orderBy: [NodelinkPvaluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NodelinkPvaluesEdge
+}
+type UpsertFunctionPayload {
+  clientMutationId: String
+  thing: Thing
+  query: Query
+  conceptByConceptid: Concept
+  thingEdge(
+    orderBy: [ThingsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ThingsEdge
+}
+type UpsertNodelinksPayload {
+  clientMutationId: String
+  nodelinks: [Nodelink]
+ query: Query
+}
+
+input AlgorithmMeasureLinkCondition {
+  id: Int
+  packageId: Int
+  equipmentConceptId: Int
+  algorithmConceptId: Int
+  inputMeasureId: Int
+  inputTagId: Int
+  inputTagValue: String
+}
+input AlgorithmMeasureLinkInput {
+  id: Int
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputMeasureId: Int!
+  inputTagId: Int
+  inputTagValue: String
+}
+input AlgorithmMeasureLinkPatch {
+  id: Int
+  packageId: Int
+  equipmentConceptId: Int
+  algorithmConceptId: Int
+  inputMeasureId: Int
+  inputTagId: Int
+  inputTagValue: String
+}
+input AlgorithmPropertyLinkCondition {
+  id: Int
+  packageId: Int
+  equipmentConceptId: Int
+  algorithmConceptId: Int
+  inputPropertyId: Int
+}
+input AlgorithmPropertyLinkInput {
+  id: Int
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputPropertyId: Int!
+}
+input AlgorithmPropertyLinkPatch {
+  id: Int
+  packageId: Int
+  equipmentConceptId: Int
+  algorithmConceptId: Int
+  inputPropertyId: Int
+}
+input ConceptCondition {
+  id: Int
+  packageid: Int
+  urn: String
+  name: String
+  conceptkind: Conceptkindtype
+  version: Int
+  label: String
+  icon: String
+  description: String
+  inherit: Boolean
+  parentconceptid: Int
+  ui: Any
+}
+input ContextparamInput {
+  type: Filtertype
+  id: Int
+  value: String
+  urn: String
+}
+input CreateAlgorithmMeasureLinkInput {
+  clientMutationId: String
+  algorithmMeasureLink: AlgorithmMeasureLinkInput!
+}
+
+input CreateAlgorithmPropertyLinkInput {
+  clientMutationId: String
+  algorithmPropertyLink: AlgorithmPropertyLinkInput!
+}
+input CreateDbupjournalDmlInput {
+  clientMutationId: String
+  dbupjournalDml: DbupjournalDmlInput!
+}
+input CreateMeasureLinkInput {
+  clientMutationId: String
+  measureLink: MeasureLinkInput!
+}
+input CreateNodelinkPvalueInput {
+  clientMutationId: String
+  nodelinkPvalue: NodelinkPvalueInput!
+}
+input CreateSubjectidInput {
+  clientMutationId: String
+  subjectid: SubjectidInput!
+}
+input DbupjournalDmlCondition {
+  schemaversionsid: Int
+  scriptname: String
+  applied: DateTime
+}
+input DbupjournalDmlInput {
+  schemaversionsid: Int
+  scriptname: String!
+  applied: DateTime!
+}
+input DbupjournalDmlPatch {
+  schemaversionsid: Int
+  scriptname: String
+  applied: DateTime
+}
+input DeleteAlgorithmMeasureLinkByIdInput {
+  clientMutationId: String
+  id: Int!
+}
+input DeleteAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValueInput {
+  clientMutationId: String
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputMeasureId: Int!
+  inputTagId: Int!
+  inputTagValue: String!
+}
+input DeleteAlgorithmPropertyLinkByIdInput {
+  clientMutationId: String
+  id: Int!
+}
+input DeleteAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyIdInput {
+  clientMutationId: String
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputPropertyId: Int!
+}
+input DeleteDbupjournalDmlBySchemaversionsidInput {
+  clientMutationId: String
+  schemaversionsid: Int!
+}
+input DeleteFunctionInput {
+  clientMutationId: String
+  thingid: Int
+}
+input DeleteMeasureLinkByIdInput {
+  clientMutationId: String
+  id: Int!
+}
+input DeleteMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValueInput {
+  clientMutationId: String
+  packageId: Int!
+  conceptId: Int!
+  measureId: Int!
+  tagId: Int!
+  tagValue: String!
+}
+input DeleteNodelinkPvalueByIdInput {
+  clientMutationId: String
+  id: Int!
+}
+input DeleteTenantInput {
+  clientMutationId: String
+  tenantid: Int
+}
+input MeasureCondition {
+  id: Int
+  urn: String
+  packageid: Int
+  name: String
+  label: String
+  encoding: Encodingtype
+  accumulation: Accumulationtype
+  statistical: Statisticaltype
+  timeaggregation: Timeaggregationtype
+  unitid: Int
+  createdate: DateTime
+  updatedate: DateTime
+  description: String
+  enumparent: Int
+  uipreferenceid: Int
+}
+input MeasureLinkCondition {
+  id: Int
+  packageId: Int
+  conceptId: Int
+  measureId: Int
+  tagId: Int
+  tagValue: String
+}
+input MeasureLinkInput {
+  id: Int
+  packageId: Int!
+  conceptId: Int!
+  measureId: Int!
+  tagId: Int
+  tagValue: String
+}
+input MeasureLinkPatch {
+  id: Int
+  packageId: Int
+  conceptId: Int
+  measureId: Int
+  tagId: Int
+  tagValue: String
+}
+input NodelinkCondition {
+  id: Int
+  srcid: Int
+  srcnode: Nodekindtype
+  dstid: Int
+  dstnode: Nodekindtype
+  kind: Linkkindtype
+  createdate: DateTime
+  srcmeasureid: Int
+  srctagvalue: String
+  srceventconceptid: Int
+  srcalarmconceptid: Int
+  srcpropertyid: Int
+  dstmeasureid: Int
+  dsttagvalue: String
+  dsteventconceptid: Int
+  dstalarmconceptid: Int
+  dstpropertyid: Int
+  percentage: Float
+  srctagid: Int
+  dsttagid: Int
+}
+input NodelinkPvalueCondition {
+  id: Int
+  nodelinkId: Int
+  propertyId: Int
+  createDate: DateTime
+  updateDate: DateTime
+  pfval: Float
+  psval: String
+  pival: Int
+  ptsval: DateTime
+}
+input NodelinkPvalueInput {
+  id: Int
+  nodelinkId: Int!
+  propertyId: Int!
+  createDate: DateTime
+  updateDate: DateTime
+  pfval: Float
+  psval: String
+  pival: Int
+  ptsval: DateTime
+}
+input NodelinkPvaluePatch {
+  id: Int
+  nodelinkId: Int
+  propertyId: Int
+  createDate: DateTime
+  updateDate: DateTime
+  pfval: Float
+  psval: String
+  pival: Int
+  ptsval: DateTime
+}
+input NodelinkparamInput {
+  srcid: Int
+  srcnode: Nodekindtype
+  dstid: Int
+  dstnode: Nodekindtype
+  kind: Linkkindtype
+  measureurn: String
+  tagid: Int
+  tagvalue: String
+  eventconcepturn: String
+  alarmconcepturn: String
+}
+input PvparamsurnInput {
+  propertyurn: String
+  fval: Float
+  sval: String
+  ival: Int
+}
+input SubjectidCondition {
+  subjectId: Int
+}
+input SubjectidInput {
+  subjectId: Int
+}
+input ThingCondition {
+  id: Int
+  conceptid: Int
+  name: String
+  label: String
+  tenantid: Int
+  handle: String
+  createdate: DateTime
+  updatedate: DateTime
+  version: Int
+}
+input ThingnodelinkbusinessquantitytypeInput {
+  thingid: Int
+  nodekind: Nodekindtype
+  businessquantityname: String
+}
+input UpdateAlgorithmMeasureLinkByIdInput {
+  clientMutationId: String
+  algorithmMeasureLinkPatch: AlgorithmMeasureLinkPatch!
+  id: Int!
+}
+input UpdateAlgorithmMeasureLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputMeasureIdAndInputTagIdAndInputTagValueInput {
+  clientMutationId: String
+  algorithmMeasureLinkPatch: AlgorithmMeasureLinkPatch!
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputMeasureId: Int!
+  inputTagId: Int!
+  inputTagValue: String!
+}
+input UpdateAlgorithmPropertyLinkByIdInput {
+  clientMutationId: String
+  algorithmPropertyLinkPatch: AlgorithmPropertyLinkPatch!
+  id: Int!
+}
+input UpdateAlgorithmPropertyLinkByPackageIdAndEquipmentConceptIdAndAlgorithmConceptIdAndInputPropertyIdInput {
+  clientMutationId: String
+  algorithmPropertyLinkPatch: AlgorithmPropertyLinkPatch!
+  packageId: Int!
+  equipmentConceptId: Int!
+  algorithmConceptId: Int!
+  inputPropertyId: Int!
+}
+input UpdateDbupjournalDmlBySchemaversionsidInput {
+  clientMutationId: String
+  dbupjournalDmlPatch: DbupjournalDmlPatch!
+  schemaversionsid: Int!
+}
+input UpdateMeasureLinkByIdInput {
+  clientMutationId: String
+  measureLinkPatch: MeasureLinkPatch!
+  id: Int!
+}
+input UpdateMeasureLinkByPackageIdAndConceptIdAndMeasureIdAndTagIdAndTagValueInput {
+  clientMutationId: String
+  measureLinkPatch: MeasureLinkPatch!
+  packageId: Int!
+  conceptId: Int!
+  measureId: Int!
+  tagId: Int!
+  tagValue: String!
+}
+input UpdateNodelinkPvalueByIdInput {
+  clientMutationId: String
+  nodelinkPvaluePatch: NodelinkPvaluePatch!
+  id: Int!
+}
+input UpsertFunctionInput {
+  clientMutationId: String
+  thingid: Int
+  tenantid: Int
+  concepturn: String
+  thingname: String
+  thinglabel: String
+  thinghandle: String
+  siteid: Int
+  pvarray: [PvparamsurnInput]
+}
+input UpsertNodelinksInput {
+  clientMutationId: String
+  nodelinks: [NodelinkparamInput]
+}
+enum Accumulationtype {
+  CUMULATIVE
+  INTERVAL
+  STATE
+  NA
+}
+enum AlgorithmMeasureLinksOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  PACKAGE_ID_ASC
+  PACKAGE_ID_DESC
+  EQUIPMENT_CONCEPT_ID_ASC
+  EQUIPMENT_CONCEPT_ID_DESC
+  ALGORITHM_CONCEPT_ID_ASC
+  ALGORITHM_CONCEPT_ID_DESC
+  INPUT_MEASURE_ID_ASC
+  INPUT_MEASURE_ID_DESC
+  INPUT_TAG_ID_ASC
+  INPUT_TAG_ID_DESC
+  INPUT_TAG_VALUE_ASC
+  INPUT_TAG_VALUE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+enum AlgorithmPropertyLinksOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  PACKAGE_ID_ASC
+  PACKAGE_ID_DESC
+  EQUIPMENT_CONCEPT_ID_ASC
+  EQUIPMENT_CONCEPT_ID_DESC
+  ALGORITHM_CONCEPT_ID_ASC
+  ALGORITHM_CONCEPT_ID_DESC
+  INPUT_PROPERTY_ID_ASC
+  INPUT_PROPERTY_ID_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+enum Conceptkindtype {
+  PRODUCT
+  TENANT
+  OTHER
+  EVENT
+  ALARM
+  FUNCTION
+  LOAD
+  ALGORITHM
+  ACTION_RULE
+  BILLING
+  EXTERNAL_SOURCE
+  EQUIPMENT
+  MAINTENANCE
+  JOB
+}
+enum ConceptsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  PACKAGEID_ASC
+  PACKAGEID_DESC
+  URN_ASC
+  URN_DESC
+  NAME_ASC
+  NAME_DESC
+  CONCEPTKIND_ASC
+  CONCEPTKIND_DESC
+  VERSION_ASC
+  VERSION_DESC
+  LABEL_ASC
+  LABEL_DESC
+  ICON_ASC
+  ICON_DESC
+  DESCRIPTION_ASC
+  DESCRIPTION_DESC
+  INHERIT_ASC
+  INHERIT_DESC
+  PARENTCONCEPTID_ASC
+  PARENTCONCEPTID_DESC
+  UI_ASC
+  UI_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum DbupjournalDmlsOrderBy {
+  NATURAL
+  SCHEMAVERSIONSID_ASC
+  SCHEMAVERSIONSID_DESC
+  SCRIPTNAME_ASC
+  SCRIPTNAME_DESC
+  APPLIED_ASC
+  APPLIED_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum Encodingtype {
+  FLOAT
+  INTEGER
+  ID
+  STRING
+  TIMESTAMP
+  ENUM
+  JSON
+}
+enum Filtertype {
+  ID
+  TENANT
+  VALUE
+}
+
+enum Linkkindtype {
+  CONTAINS
+  MAIN
+  FEED
+  INCOMER
+  ROOT
+  MEASURE
+  PERFORMS
+  RESIDUAL_FEED
+  OCCUPIES
+  MONITOR_LOAD
+  FORWARD
+  EXTENDS
+  CONTEXT
+  GROUPS
+}
+enum MeasureLinksOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  PACKAGE_ID_ASC
+  PACKAGE_ID_DESC
+  CONCEPT_ID_ASC
+  CONCEPT_ID_DESC
+  MEASURE_ID_ASC
+  MEASURE_ID_DESC
+  TAG_ID_ASC
+  TAG_ID_DESC
+  TAG_VALUE_ASC
+  TAG_VALUE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum MeasuresOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  URN_ASC
+  URN_DESC
+  PACKAGEID_ASC
+  PACKAGEID_DESC
+  NAME_ASC
+  NAME_DESC
+  LABEL_ASC
+  LABEL_DESC
+  ENCODING_ASC
+  ENCODING_DESC
+  ACCUMULATION_ASC
+  ACCUMULATION_DESC
+  STATISTICAL_ASC
+  STATISTICAL_DESC
+  TIMEAGGREGATION_ASC
+  TIMEAGGREGATION_DESC
+  UNITID_ASC
+  UNITID_DESC
+  CREATEDATE_ASC
+  CREATEDATE_DESC
+  UPDATEDATE_ASC
+  UPDATEDATE_DESC
+  DESCRIPTION_ASC
+  DESCRIPTION_DESC
+  ENUMPARENT_ASC
+  ENUMPARENT_DESC
+  UIPREFERENCEID_ASC
+  UIPREFERENCEID_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum Nodekindtype {
+  UPSTREAM_NODE
+  UPSTREAM_NODE_PHASE_A
+  UPSTREAM_NODE_PHASE_B
+  UPSTREAM_NODE_PHASE_C
+  UPSTREAM_NODE_NEUTRAL
+  DOWNSTREAM_NODE_NEUTRAL
+  MEASUREMENT_NODE_NEUTRAL
+  DOWNSTREAM_NODE
+  DOWNSTREAM_NODE_PHASE_A
+  DOWNSTREAM_NODE_PHASE_B
+  DOWNSTREAM_PHASE_C
+  MEASUREMENT_NODE
+  MEASUREMENT_NODE_PHASE_A
+  MEASUREMENT_NODE_PHASE_B
+  MEASUREMENT_NODE_PHASE_C
+  ROOT_NODE
+}
+enum NodelinkPvaluesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  NODELINK_ID_ASC
+  NODELINK_ID_DESC
+  PROPERTY_ID_ASC
+  PROPERTY_ID_DESC
+  CREATE_DATE_ASC
+  CREATE_DATE_DESC
+  UPDATE_DATE_ASC
+  UPDATE_DATE_DESC
+  PFVAL_ASC
+  PFVAL_DESC
+  PSVAL_ASC
+  PSVAL_DESC
+  PIVAL_ASC
+  PIVAL_DESC
+  PTSVAL_ASC
+  PTSVAL_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum NodelinksOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  SRCID_ASC
+  SRCID_DESC
+  SRCNODE_ASC
+  SRCNODE_DESC
+  DSTID_ASC
+  DSTID_DESC
+  DSTNODE_ASC
+  DSTNODE_DESC
+  KIND_ASC
+  KIND_DESC
+  CREATEDATE_ASC
+  CREATEDATE_DESC
+  SRCMEASUREID_ASC
+  SRCMEASUREID_DESC
+  SRCTAGVALUE_ASC
+  SRCTAGVALUE_DESC
+  SRCEVENTCONCEPTID_ASC
+  SRCEVENTCONCEPTID_DESC
+  SRCALARMCONCEPTID_ASC
+  SRCALARMCONCEPTID_DESC
+  SRCPROPERTYID_ASC
+  SRCPROPERTYID_DESC
+  DSTMEASUREID_ASC
+  DSTMEASUREID_DESC
+  DSTTAGVALUE_ASC
+  DSTTAGVALUE_DESC
+  DSTEVENTCONCEPTID_ASC
+  DSTEVENTCONCEPTID_DESC
+  DSTALARMCONCEPTID_ASC
+  DSTALARMCONCEPTID_DESC
+  DSTPROPERTYID_ASC
+  DSTPROPERTYID_DESC
+  PERCENTAGE_ASC
+  PERCENTAGE_DESC
+  SRCTAGID_ASC
+  SRCTAGID_DESC
+  DSTTAGID_ASC
+  DSTTAGID_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+enum Quantitynametype {
+  AMP_SQUARED
+  APPARENT_ENERGY
+  APPARENT_POWER
+  CURRENT
+  DENSITY
+  ELECTRIC_CAPACITANCE
+  ELECTRIC_CHARGE
+  ELECTRIC_POTENTIAL
+  ELECTRIC_RESISTANCE
+  FLOW_RATE
+  FREQUENCY
+  LENGTH
+  MASS_FLOW_RATE
+  NONE
+  PERCENTAGE
+  PLANE_ANGLE
+  PRESSURE
+  POWER_LEVEL
+  REACTIVE_ENERGY
+  REACTIVE_POWER
+  REAL_ENERGY
+  REAL_POWER
+  RELATIVE_TEMPERATURE
+  ROTATIONAL_SPEED
+  SPECIFIC_ENTHALPY
+  TIME
+  UNKNOWN
+  VOLUME
+  MASS
+  AREA
+  COST_PER_VOLUME
+  ELECTRICITY_RATE
+  CONCENTRATION
+  CURRENT_DENSITY
+  DATA_SIZE
+  ENERGY
+  HEAT_ENERGY
+  HEAT_RATE
+  ILLUMINANCE
+  INSOLATION
+  LUMINANCE
+  POWER
+  PRESSURE_CHANGE_RATE
+  RELATIVE_HUMIDITY
+  SOUND_PRESSURE_LEVEL
+  SPECIFIC_HEAT
+  TEMPERATURE_CHANGE_RATE
+  TEMPERATURE
+  THERMAL_CONDUCTIVITY
+  THERMAL_ENERGY
+  VELOCITY
+  WIND_SPEED
+}
+enum Statisticaltype {
+  INTERVAL
+  ACCUMULATION
+  DEMAND
+  INSTANTANEOUS
+  MAXIMUM
+  MAXIMUM_DEMAND
+  MINIMUM
+  MINIMUM_DEMAND
+  TIME_AVERAGE
+  TIME_AVERAGE_DEMAND
+  DEMAND_SLIDING_WINDOW
+  DEMAND_BLOCK
+  NA
+}
+enum SubjectidsOrderBy {
+  NATURAL
+  SUBJECT_ID_ASC
+  SUBJECT_ID_DESC
+}
+enum ThingsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  CONCEPTID_ASC
+  CONCEPTID_DESC
+  NAME_ASC
+  NAME_DESC
+  LABEL_ASC
+  LABEL_DESC
+  TENANTID_ASC
+  TENANTID_DESC
+  HANDLE_ASC
+  HANDLE_DESC
+  CREATEDATE_ASC
+  CREATEDATE_DESC
+  UPDATEDATE_ASC
+  UPDATEDATE_DESC
+  VERSION_ASC
+  VERSION_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+enum Timeaggregationtype {
+  AVERAGE
+  DELTA
+  SUM
+  NEGATIVE
+  NA
+}
+
+enum Valuequalitytype {
+  OK
+  BAD
+  MISSING
+  INTERPOLATED
+}
+
+type EMCP_AlarmCategorySelection {
+  id: Int!
+  name: String
+  label: String
+  description: String
+  selected: Boolean!
+}
+
+type EMCP_AlarmInstanceCollectionSegment {
+  items: [EMCP_AlarmInstance!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_AlarmOccurrenceCollectionSegment {
+  items: [EMCP_AlarmOccurrence!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_AlarmOccurrenceCountTimeRangeBin {
+  priorityCounts: [EMCP_AlarmPriorityCountType!]!
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+}
+
+type EMCP_AlarmOccurrenceCountTimeRangeBinCollectionSegment {
+  items: [EMCP_AlarmOccurrenceCountTimeRangeBin!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type EMCP_AlarmOccurrencesSummary {
+  totalCount: Int!
+  details: EMCP_BinnedAlarmOccurrenceDetails!
+  alarmPrioritySummary: [EMCP_AlarmPrioritySummary!]!
+  timeRangeSummaries: [EMCP_BinnedAlarmOccurrenceTimeRangeSummary!]!
+}
+
+type EMCP_AlarmPriorityCountType {
+  priority: EMCP_AlarmPriorityType!
+  count: Long!
+}
+
+type EMCP_AlarmPrioritySelection {
+  id: Int!
+  name: String
+  label: String
+  selected: Boolean!
+}
+
+type EMCP_AlarmPrioritySummary {
+  priority: EMCP_AlarmPriorityType!
+  totalCount: Int!
+  details: EMCP_BinnedAlarmOccurrenceDetails!
+}
+
+type EMCP_BinnedAlarmOccurrenceDetails {
+  acknowledgedCount: Int!
+  unacknowledgedCount: Int!
+  activeCount: Int!
+  inactiveCount: Int!
+}
+
+type EMCP_BinnedAlarmOccurrenceTimeRangeSummary {
+  totalCount: Int!
+  details: EMCP_BinnedAlarmOccurrenceDetails!
+  alarmPrioritySummary: [EMCP_AlarmPrioritySummary!]!
+  startTime: DateTime!
+  endTime: DateTime!
+  timeZone: String!
+}
+
+type EMCP_NotificationPreference {
+  priorityFilter: [EMCP_AlarmPriorityType!]
+  id: Int!
+  prioritySelection: [EMCP_AlarmPrioritySelection]
+  notificationSelection: [EMCP_AlarmCategorySelection]
+  subjectId: Int!
+  tenantId: Int!
+  type: EMCP_NotificationType
+  tenant: EMCP_Thing
+  notificationSubscriptions: [EMCP_NotificationSubscription]
+  subject: EMCP_Subject
+}
+
+type EMCP_NotificationPreferenceCollectionSegment {
+  items: [EMCP_NotificationPreference!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+type EMCP_NotificationSubscription {
+  alarmEventConceptCategoryId: Int!
+  notificationPreferenceId: Int!
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategory
+  notificationPreference: EMCP_NotificationPreference
+}
+
+type EMCP_RankedAlarmOccurrence {
+  ranking: Int!
+  count: Int!
+  thingId: Int!
+  thingLabel: String!
+  thingContext: [EMCP_TopoNodeContext!]!
+}
+
+type EMCP_RankedAlarmOccurrenceCollectionSegment {
+  items: [EMCP_RankedAlarmOccurrence!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+input EMCP_AcknowledgeAlarmInstanceInput {
+  alarmInstanceId: Int!
+  comment: String
+}
+
+input EMCP_NotificationPreferenceFilterInput {
+  and: [EMCP_NotificationPreferenceFilterInput!]
+  or: [EMCP_NotificationPreferenceFilterInput!]
+  priorityFilter: ListEMCP_AlarmPriorityTypeOperationFilterInput
+  id: ComparableEMCP_Int32OperationFilterInput
+  subjectId: ComparableEMCP_Int32OperationFilterInput
+  tenantId: ComparableEMCP_Int32OperationFilterInput
+  type: EMCP_NullableOfNotificationTypeOperationFilterInput
+  tenant: EMCP_ThingFilterInput
+  notificationSubscriptions: ListEMCP_FilterInputTypeOfNotificationSubscriptionFilterInput
+}
+
+input EMCP_NotificationSubscriptionFilterInput {
+  and: [EMCP_NotificationSubscriptionFilterInput!]
+  or: [EMCP_NotificationSubscriptionFilterInput!]
+  alarmEventConceptCategoryId: ComparableEMCP_Int32OperationFilterInput
+  notificationPreferenceId: ComparableEMCP_Int32OperationFilterInput
+  alarmEventConceptCategory: EMCP_AlarmEventConceptCategoryFilterInput
+  notificationPreference: EMCP_NotificationPreferenceFilterInput
+}
+
+input EMCP_NullableOfNotificationTypeOperationFilterInput {
+  eq: EMCP_NotificationType
+  neq: EMCP_NotificationType
+  in: [EMCP_NotificationType]
+  nin: [EMCP_NotificationType]
+}
+
+input EMCP_UpdateNotificationPreferenceInput {
+  notificationPreferenceId: Int!
+  prioritySelectionIds: [Int!]
+  categorySelectionIds: [Int!]
+}
+
+input EMCP_UpsertAlarmMutationInput {
+  startTime: DateTime!
+  endTime: DateTime
+  properties: String!
+  measures: String
+  possibleProblem: String
+  possibleCause: String
+  possibleRisk: String
+  possibleRecommendation: String
+  instanceHandle: String
+  occurrenceHandle: String!
+  conceptUrn: String!
+  priority: EMCP_AlarmPriorityType!
+  state: EMCP_AlarmState!
+  condition: EMCP_AlarmCondition!
+  confirmed: EMCP_AlarmConfirmed
+  thingHandle: String
+  controlValue: EMCP_AlarmControlValueType!
+  tsMath: EMCP_TsMathType!
+  onditmms: Int!
+  thingId: Int
+}
+
+input ListEMCP_AlarmPriorityTypeOperationFilterInput {
+  all: EMCP_AlarmPriorityTypeOperationFilterInput
+  none: EMCP_AlarmPriorityTypeOperationFilterInput
+  some: EMCP_AlarmPriorityTypeOperationFilterInput
+  any: Boolean
+}
+
+input ListEMCP_FilterInputTypeOfNotificationSubscriptionFilterInput {
+  all: EMCP_NotificationSubscriptionFilterInput
+  none: EMCP_NotificationSubscriptionFilterInput
+  some: EMCP_NotificationSubscriptionFilterInput
+  any: Boolean
+}
+
+enum EMCP_AlarmCondition {
+  NORMAL
+  ABNORMAL
+  NOT_APPLICABLE
+}
+
+enum EMCP_AlarmConfirmed {
+  CONFIRMED
+  UNCONFIRMED
+  NOT_APPLICABLE
+}
+
+enum EMCP_AlarmState {
+  NORMAL
+  DISABLED
+  SHELVED
+  SUPPRESSED
+}
+
+enum EMCP_NotificationType {
+  EMAIL
+  MOBILEAPP
+}
+
+type EMCP_TableGadgetItemWithUnit {
+  unitId: Int
+  unit: EMCP_Unit
+  businessQuantityIsLogged: Boolean!
+  businessQuantityId: Int!
+  historicalQuery: Boolean!
+  key: String!
+  label: String!
+  mustHaveData: Boolean!
+  mustHaveSlot: Boolean!
+  packageId: Int!
+  position: Int!
+  tableGadgetId: Int!
+  businessQuantity: EMCP_BusinessQuantity
+  package: EMCP_Package
+  tableGadget: EMCP_TableGadget
+}
+
+type EMCP_TableGadgetItemWithUnitCollectionSegment {
+  items: [EMCP_TableGadgetItemWithUnit!]
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+input EMCP_BusinessQuantitySortInput {
+  commodity: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  package: EMCP_PackageSortInput
+}
+input EMCP_TableGadgetItemWithUnitFilterInput {
+  and: [EMCP_TableGadgetItemWithUnitFilterInput!]
+  or: [EMCP_TableGadgetItemWithUnitFilterInput!]
+  unitId: ComparableEMCP_NullableOfInt32OperationFilterInput
+  unit: EMCP_UnitFilterInput
+  businessQuantityIsLogged: EMCP_BooleanOperationFilterInput
+  businessQuantityId: ComparableEMCP_Int32OperationFilterInput
+  historicalQuery: EMCP_BooleanOperationFilterInput
+  key: EMCP_StringOperationFilterInput
+  label: EMCP_StringOperationFilterInput
+  mustHaveData: EMCP_BooleanOperationFilterInput
+  mustHaveSlot: EMCP_BooleanOperationFilterInput
+  packageId: ComparableEMCP_Int32OperationFilterInput
+  position: ComparableEMCP_Int32OperationFilterInput
+  tableGadgetId: ComparableEMCP_Int32OperationFilterInput
+  businessQuantity: EMCP_BusinessQuantityFilterInput
+  package: EMCP_PackageFilterInput
+  tableGadget: EMCP_TableGadgetFilterInput
+}
+
+input EMCP_TableGadgetItemWithUnitSortInput {
+  unitId: SortEnumType
+  unit: EMCP_UnitSortInput
+  businessQuantityIsLogged: SortEnumType
+  businessQuantityId: SortEnumType
+  historicalQuery: SortEnumType
+  key: SortEnumType
+  label: SortEnumType
+  mustHaveData: SortEnumType
+  mustHaveSlot: SortEnumType
+  packageId: SortEnumType
+  position: SortEnumType
+  tableGadgetId: SortEnumType
+  businessQuantity: EMCP_BusinessQuantitySortInput
+  package: EMCP_PackageSortInput
+  tableGadget: EMCP_TableGadgetSortInput
+}
+
+input EMCP_TableGadgetSortInput {
+  description: SortEnumType
+  id: SortEnumType
+  name: SortEnumType
+  packageId: SortEnumType
+  package: EMCP_PackageSortInput
+}
+scalar Name
+scalar DateTime
+
+scalar Any
+scalar Decimal
+scalar Long
