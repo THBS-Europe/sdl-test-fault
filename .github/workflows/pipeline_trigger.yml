@@ -101,7 +101,7 @@ jobs:
           export CACHE_POLICY=$(yq eval '.responseCache.cachepolicy' generate.yaml)
           export CORRELATION_POLICY=$(yq eval '.corelation.correlationpolicy' generate.yaml)
           export JWT_POLICY=$(yq -r '.validateJWT.jwtpolicy' generate.yaml)
-          export CORS_POLICY=$(yq -r '.allowedOrigins.crossoriginpolicyapply' generate.yaml)
+          export CORS_POLICY_APPLY=$(yq -r '.allowedOrigins.crossoriginpolicyapply' generate.yaml)
 
           export TYPE=$(yq -r '.type' generate.yaml)
 
